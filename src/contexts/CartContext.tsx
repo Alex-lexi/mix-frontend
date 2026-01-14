@@ -33,12 +33,15 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const loadCart = async (id: string) => {
+    if (!id) return;
+    
     try {
       setLoading(true);
       const cartData = await cartService.get(id);
       setCart(cartData);
     } catch (error) {
       console.error('Erro ao carregar carrinho:', error);
+      // Se o carrinho não existe, criar um novo
       setCart(null);
     } finally {
       setLoading(false);
@@ -46,6 +49,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
   };
 
   const addToCart = async (data: AddToCartData) => {
+    if (!clienteId) {
+      throw new Error('Cliente ID não disponível');
+    }
+    
     try {
       const updatedCart = await cartService.addItem(clienteId, data);
       setCart(updatedCart);
@@ -56,6 +63,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
   };
 
   const updateQuantity = async (itemId: number, quantidade: number) => {
+    if (!clienteId) {
+      throw new Error('Cliente ID não disponível');
+    }
+    
     try {
       const updatedCart = await cartService.updateItem(clienteId, itemId, { quantidade });
       setCart(updatedCart);
@@ -66,6 +77,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
   };
 
   const removeItem = async (itemId: number) => {
+    if (!clienteId) {
+      throw new Error('Cliente ID não disponível');
+    }
+    
     try {
       const updatedCart = await cartService.removeItem(clienteId, itemId);
       setCart(updatedCart);
@@ -76,6 +91,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
   };
 
   const clearCart = async () => {
+    if (!clienteId) {
+      throw new Error('Cliente ID não disponível');
+    }
+    
     try {
       await cartService.clear(clienteId);
       setCart(null);
@@ -86,11 +105,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
   };
 
   const refreshCart = async () => {
-    await loadCart(clienteId);
+    if (clienteId) {
+      await loadCart(clienteId);
+    }
   };
 
-  const itemsCount = cart?.itens.reduce((sum, item) => sum + item.quantidade, 0) || 0;
-  const total = cart?.itens.reduce((sum, item) => sum + item.produto.preco * item.quantidade, 0) || 0;
+  const itemsCount = cart?.itens?.reduce((sum, item) => sum + item.quantidade, 0) || 0;
+  const total = cart?.itens?.reduce((sum, item) => sum + (item.produto?.preco || 0) * item.quantidade, 0) || 0;
 
   return (
     <CartContext.Provider

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:3000/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -27,6 +27,7 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
+    console.error('API Error:', error.response?.data || error.message);
     if (error.response?.status === 401) {
       // Token inválido ou expirado
       localStorage.removeItem('token');
@@ -36,5 +37,7 @@ api.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+console.log('API Base URL:', API_BASE_URL);
 
 export default api;

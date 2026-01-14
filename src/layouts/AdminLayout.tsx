@@ -33,13 +33,14 @@ export function AdminLayout({ children }: AdminLayoutProps) {
   ];
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex h-screen bg-gradient-to-br from-[#1a0b2e] to-[#2d1b4e]">
       {/* Sidebar */}
-      <aside className="w-64 bg-white shadow-md">
-        <div className="p-6 border-b">
-          <h1 className="text-2xl font-bold text-primary-600">Admin Panel</h1>
+      <aside className="w-64 bg-[#0f0620]/90 backdrop-blur-md shadow-2xl border-r border-pink-500/20">
+        <div className="p-6 border-b border-pink-500/20">
+          <img src="/logo.svg" alt="MIX" className="h-14 w-auto mb-3 brightness-0 invert" />
+          <h1 className="text-lg font-bold text-pink-400">Admin Panel</h1>
           {user && (
-            <p className="text-sm text-gray-600 mt-2">Olá, {user.nome}</p>
+            <p className="text-sm text-gray-300 mt-2 font-medium">Olá, {user.nome}</p>
           )}
         </div>
 
@@ -51,24 +52,24 @@ export function AdminLayout({ children }: AdminLayoutProps) {
               <Link
                 key={item.path}
                 to={item.path}
-                className={`flex items-center gap-3 px-4 py-3 rounded-lg mb-2 transition-colors ${
+                className={`flex items-center gap-3 px-4 py-3 rounded-xl mb-2 transition-all font-medium ${
                   isActive
-                    ? 'bg-primary-100 text-primary-700'
-                    : 'text-gray-600 hover:bg-gray-100'
+                    ? 'bg-gradient-to-r from-pink-500 to-purple-600 text-white shadow-lg'
+                    : 'text-gray-300 hover:bg-[#2d1b4e] hover:text-pink-400'
                 }`}
               >
                 <Icon size={20} />
-                <span className="font-medium">{item.label}</span>
+                <span>{item.label}</span>
               </Link>
             );
           })}
 
           <button
             onClick={handleLogout}
-            className="flex items-center gap-3 px-4 py-3 rounded-lg mb-2 text-red-600 hover:bg-red-50 w-full transition-colors mt-4"
+            className="flex items-center gap-3 px-4 py-3 rounded-xl mb-2 text-white bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 w-full transition-all mt-4 shadow-lg font-medium"
           >
             <LogOut size={20} />
-            <span className="font-medium">Sair</span>
+            <span>Sair</span>
           </button>
         </nav>
       </aside>

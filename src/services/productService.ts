@@ -3,59 +3,82 @@ import { Product, CreateProductData, ProductFilters } from '../types';
 
 export const productService = {
   async getAll(): Promise<Product[]> {
-    const response = await api.get<Product[]>('/produtos');
-    return response.data;
+    console.log('🔍 Fetching all products...');
+    try {
+      const response = await api.get('/produtos');
+      console.log('✅ Products received:', response.data);
+      return response.data.data || response.data;
+    } catch (error) {
+      console.error('❌ Error fetching products:', error);
+      throw error;
+    }
   },
 
   async getById(id: number): Promise<Product> {
-    const response = await api.get<Product>(`/produtos/${id}`);
-    return response.data;
+    console.log('🔍 Fetching product by id:', id);
+    const response = await api.get(`/produtos/${id}`);
+    console.log('✅ Product received:', response.data);
+    return response.data.data || response.data;
   },
 
   async search(nome: string): Promise<Product[]> {
-    const response = await api.get<Product[]>(`/produtos/busca/search`, {
+    const response = await api.get(`/produtos/busca/search`, {
       params: { nome },
     });
-    return response.data;
+    return response.data.data || response.data;
   },
 
   async globalSearch(q: string): Promise<Product[]> {
-    const response = await api.get<Product[]>(`/produtos/buscar/global/search`, {
+    const response = await api.get(`/produtos/buscar/global/search`, {
       params: { q },
     });
-    return response.data;
+    return response.data.data || response.data;
   },
 
   async advancedFilter(filters: ProductFilters): Promise<Product[]> {
-    const response = await api.get<Product[]>(`/produtos/filtrar/avancado/search`, {
-      params: filters,
-    });
-    return response.data;
+    console.log('🔍 Applying filters:', filters);
+    try {
+      const response = await api.get(`/produtos/filtrar/avancado/search`, {
+        params: filters,
+      });
+      console.log('✅ Filtered products:', response.data);
+      return response.data.data || response.data;
+    } catch (error) {
+      console.error('❌ Error filtering products:', error);
+      throw error;
+    }
   },
 
   async getByCategory(categoryId: number): Promise<Product[]> {
-    const response = await api.get<Product[]>(`/produtos/categoria/${categoryId}`);
-    return response.data;
+    const response = await api.get(`/produtos/categoria/${categoryId}`);
+    return response.data.data || response.data;
   },
 
   async getSimilar(id: number): Promise<Product[]> {
-    const response = await api.get<Product[]>(`/produtos/similares/${id}`);
-    return response.data;
+    const response = await api.get(`/produtos/similares/${id}`);
+    return response.data.data || response.data;
   },
 
   async getBestsellers(): Promise<Product[]> {
-    const response = await api.get<Product[]>(`/produtos/bestsellers/lista`);
-    return response.data;
+    console.log('🔍 Fetching bestsellers...');
+    try {
+      const response = await api.get(`/produtos/bestsellers/lista`);
+      console.log('✅ Bestsellers received:', response.data);
+      return response.data.data || response.data;
+    } catch (error) {
+      console.error('❌ Error fetching bestsellers:', error);
+      throw error;
+    }
   },
 
   async create(data: CreateProductData): Promise<Product> {
-    const response = await api.post<Product>('/produtos', data);
-    return response.data;
+    const response = await api.post('/produtos', data);
+    return response.data.data || response.data;
   },
 
   async update(id: number, data: Partial<CreateProductData>): Promise<Product> {
-    const response = await api.put<Product>(`/produtos/${id}`, data);
-    return response.data;
+    const response = await api.put(`/produtos/${id}`, data);
+    return response.data.data || response.data;
   },
 
   async delete(id: number): Promise<void> {

@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import { CartProvider } from './contexts/CartContext';
 import { ProtectedRoute } from './components/ProtectedRoute';
+import { ErrorBoundary } from './components/ErrorBoundary';
 
 // Admin Pages
 import { AdminLogin } from './pages/admin/AdminLogin';
@@ -21,17 +22,18 @@ import { Rastreamento } from './pages/client/Rastreamento';
 
 function App() {
   return (
-    <BrowserRouter>
-      <AuthProvider>
-        <CartProvider>
-          <Routes>
-            {/* Client Routes */}
-            <Route path="/" element={<Home />} />
-            <Route path="/produtos" element={<Catalogo />} />
-            <Route path="/produto/:id" element={<ProdutoDetalhe />} />
-            <Route path="/carrinho" element={<Carrinho />} />
-            <Route path="/checkout" element={<Checkout />} />
-            <Route path="/rastreamento" element={<Rastreamento />} />
+    <ErrorBoundary>
+      <BrowserRouter>
+        <AuthProvider>
+          <CartProvider>
+            <Routes>
+              {/* Client Routes */}
+              <Route path="/" element={<Home />} />
+              <Route path="/produtos" element={<Catalogo />} />
+              <Route path="/produto/:id" element={<ProdutoDetalhe />} />
+              <Route path="/carrinho" element={<Carrinho />} />
+              <Route path="/checkout" element={<Checkout />} />
+              <Route path="/rastreamento" element={<Rastreamento />} />
 
             {/* Admin Routes */}
             <Route path="/admin/login" element={<AdminLogin />} />
@@ -83,6 +85,7 @@ function App() {
         </CartProvider>
       </AuthProvider>
     </BrowserRouter>
+    </ErrorBoundary>
   );
 }
 
