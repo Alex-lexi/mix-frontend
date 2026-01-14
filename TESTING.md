@@ -140,11 +140,6 @@
    - Confirme o pedido
    - Copie o número do pedido
 
-6. Rastreamento:
-   - Acesse "Rastrear Pedido"
-   - Cole o número do pedido
-   - Veja o status
-
 ### 3. Teste Gerenciamento de Pedidos (Admin)
 
 1. Volte ao Admin Panel
@@ -160,7 +155,6 @@
    - Processando → Enviado
    - Enviado → Entregue
 
-6. Volte ao rastreamento no Client App e veja as mudanças
 
 ## Comandos Úteis
 
@@ -222,6 +216,5 @@ console.log(JSON.parse(localStorage.getItem('user')))
 - [ ] Checkout valida campos obrigatórios
 - [ ] Criar pedido funciona
 - [ ] Número do pedido é exibido
-- [ ] Rastreamento encontra pedido
-- [ ] Status do pedido é exibido corretamente
-- [ ] Timeline de status funciona
+- [ ] Carrinho exibe produtos corretamente
+- [ ] Checkout funciona

@@ -1,5 +1,5 @@
 import api from './api';
-import { Product, CreateProductData, ProductFilters } from '../types';
+import { Product, CreateProductData, ProductFilters, SetPromotionData } from '../types';
 
 export const productService = {
   async getAll(): Promise<Product[]> {
@@ -67,6 +67,60 @@ export const productService = {
       return response.data.data || response.data;
     } catch (error) {
       console.error('❌ Error fetching bestsellers:', error);
+      throw error;
+    }
+  },
+
+  async getMostSold(limit: number = 10): Promise<Product[]> {
+    console.log('🔍 Fetching most sold products...');
+    try {
+      const response = await api.get('/produtos/mais-vendidos/lista', {
+        params: { limit },
+      });
+      console.log('✅ Most sold products received:', response.data);
+      return response.data.data || response.data;
+    } catch (error) {
+      console.error('❌ Error fetching most sold products:', error);
+      throw error;
+    }
+  },
+
+  async getNew(limit: number = 10, dias: number = 30): Promise<Product[]> {
+    console.log('🔍 Fetching new products...');
+    try {
+      const response = await api.get('/produtos/novidades/lista', {
+        params: { limit, dias },
+      });
+      console.log('✅ New products received:', response.data);
+      return response.data.data || response.data;
+    } catch (error) {
+      console.error('❌ Error fetching new products:', error);
+      throw error;
+    }
+  },
+
+  async getPromotions(limit: number = 10): Promise<Product[]> {
+    console.log('🔍 Fetching products on promotion...');
+    try {
+      const response = await api.get('/produtos/promocoes/lista', {
+        params: { limit },
+      });
+      console.log('✅ Promotions received:', response.data);
+      return response.data.data || response.data;
+    } catch (error) {
+      console.error('❌ Error fetching promotions:', error);
+      throw error;
+    }
+  },
+
+  async setPromotion(id: number, data: SetPromotionData): Promise<Product> {
+    console.log('🔍 Setting promotion for product:', id, data);
+    try {
+      const response = await api.put(`/produtos/${id}/promocao`, data);
+      console.log('✅ Promotion set:', response.data);
+      return response.data.data || response.data;
+    } catch (error) {
+      console.error('❌ Error setting promotion:', error);
       throw error;
     }
   },

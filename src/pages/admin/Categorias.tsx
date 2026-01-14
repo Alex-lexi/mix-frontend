@@ -118,7 +118,7 @@ export function Categorias() {
               </thead>
               <tbody>
                 {categories.map((category) => (
-                  <tr key={category.id} className="border-b hover:bg-gray-50">
+                  <tr key={category.id} className="border-b hover:bg-purple-300/30">
                     <td className="py-3 px-4">{category.id}</td>
                     <td className="py-3 px-4 font-medium">{category.nome}</td>
                     <td className="py-3 px-4 text-gray-600">{category.descricao || '-'}</td>
@@ -126,13 +126,13 @@ export function Categorias() {
                       <div className="flex justify-end gap-2">
                         <button
                           onClick={() => handleOpenModal(category)}
-                          className="text-blue-600 hover:text-blue-800"
+                          className="text-blue-600 hover:text-blue-800 cursor-pointer"
                         >
                           <Edit2 size={18} />
                         </button>
                         <button
                           onClick={() => handleDelete(category.id)}
-                          className="text-red-600 hover:text-red-800"
+                          className="text-red-600 hover:text-red-800 cursor-pointer"
                         >
                           <Trash2 size={18} />
                         </button>

@@ -83,13 +83,10 @@ export function Checkout() {
               <p className="text-3xl font-bold text-primary-600">#{orderNumber}</p>
             </div>
             <p className="text-gray-600 mb-8">
-              Você pode rastrear seu pedido usando este número.
+              Obrigado pela sua compra!
             </p>
             <div className="flex gap-4 justify-center">
-              <Button onClick={() => navigate(`/rastreamento?numero=${orderNumber}`)}>
-                Rastrear Pedido
-              </Button>
-              <Button variant="secondary" onClick={() => navigate('/produtos')}>
+              <Button onClick={() => navigate('/produtos')}>
                 Continuar Comprando
               </Button>
             </div>

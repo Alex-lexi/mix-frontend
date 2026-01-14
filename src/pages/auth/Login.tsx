@@ -5,11 +5,13 @@ import { Button } from '../../components/Button';
 import { Input } from '../../components/Input';
 import { Toast } from '../../components/Toast';
 import { useToast } from '../../hooks/useToast';
+import { Eye, EyeOff } from 'lucide-react';
 
 export function Login() {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
   const { toast, showToast, hideToast } = useToast();
@@ -23,11 +25,13 @@ export function Login() {
       showToast('Login realizado com sucesso!', 'success');
       
       // Redireciona baseado no tipo de usuário
-      if (user.tipo === 'vendedor') {
-        navigate('/admin/dashboard');
-      } else {
-        navigate('/');
-      }
+      setTimeout(() => {
+        if (user.tipo === 'admin' || user.tipo === 'vendedor') {
+          navigate('/admin/dashboard');
+        } else {
+          navigate('/');
+        }
+      }, 1000);
     } catch (error: any) {
       showToast(error.response?.data?.message || 'Erro ao fazer login', 'error');
     } finally {
@@ -42,7 +46,7 @@ export function Login() {
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
-          <img src="/logo.svg" alt="MIX Logo" className="h-16 mx-auto mb-4" />
+          <img src="/logo.png" alt="MIX Logo" className="h-16 mx-auto mb-4 rounded-md" />
           <h1 className="text-4xl font-bold bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent">
             Bem-vindo de volta
           </h1>
@@ -59,22 +63,32 @@ export function Login() {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="seu@email.com"
               required
-              className="bg-white/5 border-white/10 text-white placeholder:text-gray-400"
+              className="bg-white/5 border-white/10 text-gray-800 placeholder:text-gray-400"
             />
 
-            <Input
-              label="Senha"
-              type="password"
-              value={senha}
-              onChange={(e) => setSenha(e.target.value)}
-              placeholder="••••••••"
-              required
-              className="bg-white/5 border-white/10 text-white placeholder:text-gray-400"
-            />
+            <div className="relative">
+              <Input
+                label="Senha"
+                type={showPassword ? "text" : "password"}
+                value={senha}
+                onChange={(e) => setSenha(e.target.value)}
+                placeholder="••••••••"
+                required
+                className="bg-white/5 border-white/10 text-gray-700 placeholder:text-gray-400 pr-10"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-9 text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
+                tabIndex={-1}
+              >
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
+            </div>
 
             <Button 
               type="submit" 
-              className="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-semibold py-3 rounded-lg shadow-lg hover:shadow-pink-500/50 transition-all duration-300" 
+              className="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-semibold py-3 rounded-lg shadow-lg hover:shadow-pink-500/50 transition-all duration-300 cursor-pointer" 
               loading={loading}
             >
               Entrar

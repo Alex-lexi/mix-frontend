@@ -46,7 +46,6 @@ src/
 - ✅ Detalhe do Produto
 - ✅ Carrinho de Compras
 - ✅ Checkout
-- ✅ Rastreamento de Pedidos
 
 ## 🔧 Instalação
 
@@ -75,7 +74,6 @@ Aplicação disponível em: `http://localhost:5173`
 - `/produto/:id` - Detalhe
 - `/carrinho` - Carrinho
 - `/checkout` - Checkout
-- `/rastreamento` - Rastrear pedido
 
 ### Administrativas (Protegidas)
 - `/admin/login` - Login

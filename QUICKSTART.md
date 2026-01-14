@@ -64,11 +64,6 @@ curl -X POST http://localhost:3000/api/auth/register \
    - Confirme o pedido
    - Copie o número do pedido
 
-4. **Rastrear o pedido**:
-   - Vá para "Rastrear Pedido"
-   - Cole o número do pedido
-   - Veja o status
-
 ## 🔧 Configuração Avançada
 
 ### Alterar URL da API
@@ -144,7 +139,6 @@ Para verificar se tudo está funcionando:
 7. [ ] Produto aparece na home do cliente
 8. [ ] Consegue adicionar ao carrinho
 9. [ ] Consegue finalizar uma compra
-10. [ ] Consegue rastrear o pedido
 
 ## 🎉 Pronto!
 

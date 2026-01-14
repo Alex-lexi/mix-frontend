@@ -15,6 +15,7 @@ import { Categorias } from './pages/admin/Categorias';
 import { Produtos } from './pages/admin/Produtos';
 import { Pedidos } from './pages/admin/Pedidos';
 import { Perfil } from './pages/admin/Perfil';
+import { Vendedores } from './pages/admin/Vendedores';
 
 // Client Pages
 import { Home } from './pages/client/Home';
@@ -22,7 +23,6 @@ import { Catalogo } from './pages/client/Catalogo';
 import { ProdutoDetalhe } from './pages/client/ProdutoDetalhe';
 import { Carrinho } from './pages/client/Carrinho';
 import { Checkout } from './pages/client/Checkout';
-import { Rastreamento } from './pages/client/Rastreamento';
 
 function App() {
   return (
@@ -41,7 +41,6 @@ function App() {
               <Route path="/produto/:id" element={<ProdutoDetalhe />} />
               <Route path="/carrinho" element={<Carrinho />} />
               <Route path="/checkout" element={<Checkout />} />
-              <Route path="/rastreamento" element={<Rastreamento />} />
 
             {/* Admin Routes */}
             <Route path="/admin/login" element={<AdminLogin />} />
@@ -50,6 +49,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Dashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/vendedores"
+              element={
+                <ProtectedRoute allowedTypes={['admin']}>
+                  <Vendedores />
                 </ProtectedRoute>
               }
             />

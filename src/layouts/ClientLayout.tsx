@@ -35,7 +35,7 @@ export function ClientLayout({ children, onSearch }: ClientLayoutProps) {
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-20">
             <Link to="/" className="flex items-center">
-              <img src="/logo.svg" alt="MIX Catálogo Digital" className="h-14 w-auto brightness-0 invert" />
+              <img src="/logo.png" alt="MIX Catálogo Digital" className="rounded-md h-14 w-auto" />
             </Link>
 
             <div className="flex-1 max-w-xl mx-8">
@@ -55,19 +55,16 @@ export function ClientLayout({ children, onSearch }: ClientLayoutProps) {
               <Link to="/produtos" className="text-gray-300 hover:text-pink-400 font-medium transition-all">
                 Produtos
               </Link>
-              <Link to="/rastreamento" className="text-gray-300 hover:text-pink-400 font-medium transition-all">
-                Rastrear Pedido
-              </Link>
               
               {/* Auth Section */}
               {user ? (
                 <div className="flex items-center gap-4">
-                  {user.tipo === 'vendedor' && (
+                  {(user.tipo === 'admin' || user.tipo === 'vendedor') && (
                     <Link 
                       to="/admin/dashboard" 
                       className="px-4 py-2 bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-lg font-medium hover:shadow-lg hover:shadow-purple-500/50 transition-all"
                     >
-                      Painel Admin
+                      Painel {user.tipo === 'admin' ? 'Admin' : 'Vendedor'}
                     </Link>
                   )}
                   <div className="text-gray-300 text-sm">
@@ -75,7 +72,7 @@ export function ClientLayout({ children, onSearch }: ClientLayoutProps) {
                   </div>
                   <button 
                     onClick={handleLogout}
-                    className="text-gray-400 hover:text-red-400 transition-colors"
+                    className="text-gray-400 hover:text-red-400 transition-colors cursor-pointer"
                     title="Sair"
                   >
                     <LogOut size={20} />
@@ -112,14 +109,13 @@ export function ClientLayout({ children, onSearch }: ClientLayoutProps) {
         <div className="container mx-auto px-4 py-10">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div>
-              <img src="/logo.svg" alt="MIX" className="h-16 w-auto mb-4 brightness-0 invert opacity-80" />
+              <img src="/logo.png" alt="MIX" className="rounded-md h-16 w-auto mb-4 opacity-80" />
               <p className="text-gray-400">Seu mix organizado. Seu atendimento mais rápido.</p>
             </div>
             <div>
               <h4 className="font-bold mb-4 text-lg text-pink-400">Links Rápidos</h4>
               <ul className="space-y-2 text-gray-400">
                 <li><Link to="/produtos" className="hover:text-pink-400 transition-colors">Produtos</Link></li>
-                <li><Link to="/rastreamento" className="hover:text-pink-400 transition-colors">Rastrear Pedido</Link></li>
               </ul>
             </div>
             <div>

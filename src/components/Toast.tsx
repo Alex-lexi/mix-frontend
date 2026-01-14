@@ -38,7 +38,7 @@ export function Toast({ message, type, isOpen, onClose, duration = 3000 }: Toast
       <div className={`flex items-center gap-3 p-4 border rounded-lg shadow-lg ${bgColors[type]} min-w-[300px]`}>
         {icons[type]}
         <p className="flex-1 text-sm font-medium">{message}</p>
-        <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
+        <button onClick={onClose} className="text-gray-400 hover:text-gray-600 cursor-pointer">
           <X size={18} />
         </button>
       </div>

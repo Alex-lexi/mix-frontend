@@ -6,6 +6,7 @@ import {
   ShoppingCart,
   FolderTree,
   User,
+  Users,
   LogOut,
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
@@ -25,12 +26,15 @@ export function AdminLayout({ children }: AdminLayoutProps) {
   };
 
   const menuItems = [
-    { path: '/admin/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
-    { path: '/admin/produtos', icon: Package, label: 'Produtos' },
-    { path: '/admin/categorias', icon: FolderTree, label: 'Categorias' },
-    { path: '/admin/pedidos', icon: ShoppingCart, label: 'Pedidos' },
-    { path: '/admin/perfil', icon: User, label: 'Perfil' },
+    { path: '/admin/dashboard', icon: LayoutDashboard, label: 'Dashboard', adminOnly: false },
+    { path: '/admin/vendedores', icon: Users, label: 'Vendedores', adminOnly: true },
+    { path: '/admin/produtos', icon: Package, label: 'Produtos', adminOnly: false },
+    { path: '/admin/categorias', icon: FolderTree, label: 'Categorias', adminOnly: false },
+    { path: '/admin/pedidos', icon: ShoppingCart, label: 'Pedidos', adminOnly: false },
+    { path: '/admin/perfil', icon: User, label: 'Perfil', adminOnly: false },
   ];
+  
+  const isAdmin = user?.tipo === 'admin';
 
   return (
     <div className="flex h-screen bg-gradient-to-br from-[#1a0b2e] to-[#2d1b4e]">
@@ -45,28 +49,30 @@ export function AdminLayout({ children }: AdminLayoutProps) {
         </div>
 
         <nav className="p-4">
-          {menuItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = location.pathname === item.path;
-            return (
-              <Link
-                key={item.path}
-                to={item.path}
-                className={`flex items-center gap-3 px-4 py-3 rounded-xl mb-2 transition-all font-medium ${
-                  isActive
-                    ? 'bg-gradient-to-r from-pink-500 to-purple-600 text-white shadow-lg'
-                    : 'text-gray-300 hover:bg-[#2d1b4e] hover:text-pink-400'
-                }`}
-              >
-                <Icon size={20} />
-                <span>{item.label}</span>
-              </Link>
-            );
-          })}
+          {menuItems
+            .filter(item => !item.adminOnly || isAdmin) // Mostrar item apenas se não for adminOnly ou se usuário for admin
+            .map((item) => {
+              const Icon = item.icon;
+              const isActive = location.pathname === item.path;
+              return (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  className={`flex items-center gap-3 px-4 py-3 rounded-xl mb-2 transition-all font-medium ${
+                    isActive
+                      ? 'bg-gradient-to-r from-pink-500 to-purple-600 text-white shadow-lg'
+                      : 'text-gray-300 hover:bg-[#2d1b4e] hover:text-pink-400'
+                  }`}
+                >
+                  <Icon size={20} />
+                  <span>{item.label}</span>
+                </Link>
+              );
+            })}
 
           <button
             onClick={handleLogout}
-            className="flex items-center gap-3 px-4 py-3 rounded-xl mb-2 text-white bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 w-full transition-all mt-4 shadow-lg font-medium"
+            className="flex items-center gap-3 px-4 py-3 rounded-xl mb-2 text-white bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 w-full transition-all mt-4 shadow-lg font-medium cursor-pointer"
           >
             <LogOut size={20} />
             <span>Sair</span>

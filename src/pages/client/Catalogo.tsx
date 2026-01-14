@@ -120,7 +120,7 @@ export function Catalogo() {
                   onClick={() => setSelectedCategoryId(null)}
                   className={`
                     flex-shrink-0 px-6 py-2.5 rounded-full font-semibold text-sm
-                    transition-all duration-200 whitespace-nowrap
+                    transition-all duration-200 whitespace-nowrap cursor-pointer
                     ${selectedCategoryId === null
                       ? 'bg-gradient-to-r from-pink-500 to-purple-500 text-white shadow-lg scale-105'
                       : 'bg-gray-800 text-gray-300 hover:bg-gray-700 hover:text-white'
@@ -136,7 +136,7 @@ export function Catalogo() {
                     onClick={() => setSelectedCategoryId(category.id)}
                     className={`
                       flex-shrink-0 px-6 py-2.5 rounded-full font-semibold text-sm
-                      transition-all duration-200 whitespace-nowrap
+                      transition-all duration-200 whitespace-nowrap cursor-pointer
                       ${selectedCategoryId === category.id
                         ? 'bg-gradient-to-r from-pink-500 to-purple-500 text-white shadow-lg scale-105'
                         : 'bg-gray-800 text-gray-300 hover:bg-gray-700 hover:text-white'
@@ -197,7 +197,7 @@ export function Catalogo() {
             </p>
             <button
               onClick={handleClearFilters}
-              className="px-6 py-3 bg-gradient-to-r from-pink-500 to-purple-500 text-white rounded-lg font-semibold hover:shadow-lg transition-all"
+              className="px-6 py-3 bg-gradient-to-r from-pink-500 to-purple-500 text-white rounded-lg font-semibold hover:shadow-lg transition-all cursor-pointer"
             >
               Limpar Filtros
             </button>
@@ -253,9 +253,27 @@ export function Catalogo() {
                       <p className="text-sm text-gray-400 mb-2">{product.categoria.nome}</p>
                     )}
 
-                    <p className="text-2xl font-bold bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent mb-3">
-                      R$ {(product.preco || 0).toFixed(2)}
-                    </p>
+                    <div className="mb-3">
+                      {product.emPromocao && product.precoPromocional ? (
+                        <div>
+                          <div className="mb-1">
+                            <span className="bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+                              -{Math.round(((product.preco - product.precoPromocional) / product.preco) * 100)}%
+                            </span>
+                          </div>
+                          <p className="text-sm text-gray-400 line-through">
+                            R$ {(product.preco || 0).toFixed(2)}
+                          </p>
+                          <p className="text-2xl font-bold text-pink-400">
+                            R$ {(product.precoPromocional || 0).toFixed(2)}
+                          </p>
+                        </div>
+                      ) : (
+                        <p className="text-2xl font-bold bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
+                          R$ {(product.preco || 0).toFixed(2)}
+                        </p>
+                      )}
+                    </div>
 
                     <div className="flex gap-2">
                       <Link to={`/produto/${product.id}`} className="flex-1">

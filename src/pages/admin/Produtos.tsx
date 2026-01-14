@@ -7,7 +7,7 @@ import { Modal } from '../../components/Modal';
 import { Loading } from '../../components/Loading';
 import { Toast } from '../../components/Toast';
 import { useToast } from '../../hooks/useToast';
-import { Plus, Edit2, Trash2, Search, Package } from 'lucide-react';
+import { Plus, Edit2, Trash2, Search, Package, Tag, X } from 'lucide-react';
 import { productService } from '../../services/productService';
 import { categoryService } from '../../services/categoryService';
 import { Product, CreateProductData, Category } from '../../types';
@@ -17,8 +17,14 @@ export function Produtos() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isPromotionModalOpen, setIsPromotionModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [promotionProduct, setPromotionProduct] = useState<Product | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [promotionData, setPromotionData] = useState({
+    emPromocao: false,
+    precoPromocional: 0,
+  });
   const [formData, setFormData] = useState<CreateProductData>({
     nome: '',
     preco: 0,
@@ -114,6 +120,39 @@ export function Produtos() {
     }
   };
 
+  const handleOpenPromotionModal = (product: Product) => {
+    setPromotionProduct(product);
+    setPromotionData({
+      emPromocao: product.emPromocao || false,
+      precoPromocional: product.precoPromocional || product.preco * 0.8,
+    });
+    setIsPromotionModalOpen(true);
+  };
+
+  const handleClosePromotionModal = () => {
+    setIsPromotionModalOpen(false);
+    setPromotionProduct(null);
+  };
+
+  const handlePromotionSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!promotionProduct) return;
+
+    try {
+      await productService.setPromotion(promotionProduct.id, promotionData);
+      showToast(
+        promotionData.emPromocao 
+          ? 'Promoção ativada com sucesso!' 
+          : 'Promoção removida com sucesso!',
+        'success'
+      );
+      handleClosePromotionModal();
+      loadData();
+    } catch (error: any) {
+      showToast(error.response?.data?.message || 'Erro ao definir promoção', 'error');
+    }
+  };
+
   const filteredProducts = products.filter((product) =>
     product.nome.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -160,6 +199,7 @@ export function Produtos() {
                   <th className="text-left py-3 px-4">Imagem</th>
                   <th className="text-left py-3 px-4">Nome</th>
                   <th className="text-left py-3 px-4">Preço</th>
+                  <th className="text-left py-3 px-4">Promoção</th>
                   <th className="text-left py-3 px-4">Categoria</th>
                   <th className="text-left py-3 px-4">Quantidade</th>
                   <th className="text-right py-3 px-4">Ações</th>
@@ -167,7 +207,7 @@ export function Produtos() {
               </thead>
               <tbody>
                 {filteredProducts.map((product) => (
-                  <tr key={product.id} className="border-b hover:bg-gray-50">
+                  <tr key={product.id} className="border-b hover:bg-purple-300/30">
                     <td className="py-3 px-4">
                       {product.imagem ? (
                         <img
@@ -182,20 +222,48 @@ export function Produtos() {
                       )}
                     </td>
                     <td className="py-3 px-4 font-medium">{product.nome}</td>
-                    <td className="py-3 px-4">R$ {product.preco.toFixed(2)}</td>
+                    <td className="py-3 px-4">
+                      <div>
+                        <span className={product.emPromocao ? 'line-through text-gray-400 text-sm' : ''}>
+                          R$ {product.preco.toFixed(2)}
+                        </span>
+                        {product.emPromocao && product.precoPromocional && (
+                          <div className="text-green-600 font-semibold">
+                            R$ {product.precoPromocional.toFixed(2)}
+                          </div>
+                        )}
+                      </div>
+                    </td>
+                    <td className="py-3 px-4">
+                      {product.emPromocao ? (
+                        <span className="inline-flex items-center gap-1 bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs font-semibold">
+                          <Tag size={12} />
+                          Em Promoção
+                        </span>
+                      ) : (
+                        <span className="text-gray-400 text-xs">Sem promoção</span>
+                      )}
+                    </td>
                     <td className="py-3 px-4">{product.categoria?.nome || '-'}</td>
                     <td className="py-3 px-4">{product.quantidade}</td>
                     <td className="py-3 px-4">
                       <div className="flex justify-end gap-2">
                         <button
+                          onClick={() => handleOpenPromotionModal(product)}
+                          className="text-green-600 hover:text-green-800 cursor-pointer"
+                          title="Gerenciar Promoção"
+                        >
+                          <Tag size={18} />
+                        </button>
+                        <button
                           onClick={() => handleOpenModal(product)}
-                          className="text-blue-600 hover:text-blue-800"
+                          className="text-blue-600 hover:text-blue-800 cursor-pointer"
                         >
                           <Edit2 size={18} />
                         </button>
                         <button
                           onClick={() => handleDelete(product.id)}
-                          className="text-red-600 hover:text-red-800"
+                          className="text-red-600 hover:text-red-800 cursor-pointer"
                         >
                           <Trash2 size={18} />
                         </button>
@@ -298,6 +366,86 @@ export function Produtos() {
             </Button>
             <Button type="submit">
               {editingProduct ? 'Salvar' : 'Criar'}
+            </Button>
+          </div>
+        </form>
+      </Modal>
+
+      {/* Modal de Promoção */}
+      <Modal
+        isOpen={isPromotionModalOpen}
+        onClose={handleClosePromotionModal}
+        title={`Gerenciar Promoção - ${promotionProduct?.nome}`}
+        size="md"
+      >
+        <form onSubmit={handlePromotionSubmit}>
+          <div className="mb-6">
+            <div className="bg-gray-50 p-4 rounded-lg mb-4">
+              <p className="text-sm text-gray-600 mb-1">Preço Normal</p>
+              <p className="text-2xl font-bold text-gray-800">
+                R$ {promotionProduct?.preco.toFixed(2)}
+              </p>
+            </div>
+
+            <div className="flex items-center gap-3 mb-4">
+              <input
+                type="checkbox"
+                id="emPromocao"
+                checked={promotionData.emPromocao}
+                onChange={(e) => setPromotionData({ 
+                  ...promotionData, 
+                  emPromocao: e.target.checked 
+                })}
+                className="w-5 h-5 text-pink-600 rounded focus:ring-2 focus:ring-pink-500"
+              />
+              <label htmlFor="emPromocao" className="text-lg font-semibold text-gray-700">
+                Ativar Promoção
+              </label>
+            </div>
+
+            {promotionData.emPromocao && (
+              <div>
+                <Input
+                  label="Preço Promocional"
+                  type="number"
+                  step="0.01"
+                  value={promotionData.precoPromocional}
+                  onChange={(e) => setPromotionData({ 
+                    ...promotionData, 
+                    precoPromocional: parseFloat(e.target.value) 
+                  })}
+                  required
+                />
+                {promotionProduct && promotionData.precoPromocional > 0 && (
+                  <div className="mt-3 p-3 bg-green-50 rounded-lg">
+                    <p className="text-sm text-green-700 font-semibold">
+                      Desconto: {Math.round(((promotionProduct.preco - promotionData.precoPromocional) / promotionProduct.preco) * 100)}%
+                    </p>
+                    <p className="text-sm text-green-600">
+                      Economia: R$ {(promotionProduct.preco - promotionData.precoPromocional).toFixed(2)}
+                    </p>
+                  </div>
+                )}
+                {promotionProduct && promotionData.precoPromocional >= promotionProduct.preco && (
+                  <div className="mt-3 p-3 bg-red-50 rounded-lg">
+                    <p className="text-sm text-red-700 font-semibold">
+                      ⚠️ O preço promocional deve ser menor que o preço normal
+                    </p>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+
+          <div className="flex gap-3 justify-end">
+            <Button type="button" variant="secondary" onClick={handleClosePromotionModal}>
+              Cancelar
+            </Button>
+            <Button 
+              type="submit"
+              disabled={promotionData.emPromocao && promotionProduct && promotionData.precoPromocional >= promotionProduct.preco}
+            >
+              {promotionData.emPromocao ? 'Ativar Promoção' : 'Remover Promoção'}
             </Button>
           </div>
         </form>

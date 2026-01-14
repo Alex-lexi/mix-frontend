@@ -3,7 +3,7 @@ export interface User {
   id: number;
   email: string;
   nome: string;
-  tipo: 'vendedor' | 'cliente';
+  tipo: 'admin' | 'vendedor' | 'cliente';
   telefone?: string;
   createdAt: string;
   updatedAt: string;
@@ -23,7 +23,7 @@ export interface RegisterData {
   email: string;
   senha: string;
   nome: string;
-  tipo: 'vendedor' | 'cliente';
+  tipo: 'admin' | 'vendedor' | 'cliente';
   telefone?: string;
 }
 
@@ -35,10 +35,14 @@ export interface Product {
   descricao?: string;
   imagem?: string;
   quantidade: number;
+  quantidadeVendida?: number;
+  isBestseller?: boolean;
   categoriaId?: number;
   vendedorId: number;
   cor?: string;
   tamanho?: string;
+  emPromocao?: boolean;
+  precoPromocional?: number;
   categoria?: Category;
   vendedor?: User;
   createdAt: string;
@@ -54,6 +58,13 @@ export interface CreateProductData {
   categoriaId?: number;
   cor?: string;
   tamanho?: string;
+  emPromocao?: boolean;
+  precoPromocional?: number;
+}
+
+export interface SetPromotionData {
+  emPromocao: boolean;
+  precoPromocional?: number;
 }
 
 // Tipos de Categoria
@@ -76,6 +87,8 @@ export interface CartItem {
   carrinhoId: number;
   produtoId: number;
   quantidade: number;
+  precoUnitario?: number;
+  subtotal?: number;
   produto: Product;
   createdAt: string;
   updatedAt: string;
@@ -83,10 +96,13 @@ export interface CartItem {
 
 export interface Cart {
   id: number;
-  clienteId?: string;
-  usuarioId?: number;
+  usuarioId: number;
+  usuario?: User;
+  total: number;
   itens: CartItem[];
   createdAt: string;
+  updatedAt: string;
+}
   updatedAt: string;
 }
 
