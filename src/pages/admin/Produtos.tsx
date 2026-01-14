@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { AdminLayout } from '../../layouts/AdminLayout';
 import { Card } from '../../components/Card';
 import { Button } from '../../components/Button';
@@ -7,10 +7,18 @@ import { Modal } from '../../components/Modal';
 import { Loading } from '../../components/Loading';
 import { Toast } from '../../components/Toast';
 import { useToast } from '../../hooks/useToast';
-import { Plus, Edit2, Trash2, Search, Package, Tag, X } from 'lucide-react';
+import { Plus, Edit2, Trash2, Search, Package, Tag } from 'lucide-react';
 import { productService } from '../../services/productService';
 import { categoryService } from '../../services/categoryService';
 import { Product, CreateProductData, Category } from '../../types';
+
+interface ErrorResponse {
+  response?: {
+    data?: {
+      message?: string;
+    };
+  };
+}
 
 export function Produtos() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -37,11 +45,7 @@ export function Produtos() {
   });
   const { toast, showToast, hideToast } = useToast();
 
-  useEffect(() => {
-    loadData();
-  }, []);
-
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
       setLoading(true);
       const [productsData, categoriesData] = await Promise.all([
@@ -50,12 +54,16 @@ export function Produtos() {
       ]);
       setProducts(productsData);
       setCategories(categoriesData);
-    } catch (error) {
+    } catch {
       showToast('Erro ao carregar dados', 'error');
     } finally {
       setLoading(false);
     }
-  };
+  }, [showToast]);
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
 
   const handleOpenModal = (product?: Product) => {
     if (product) {
@@ -103,8 +111,9 @@ export function Produtos() {
       }
       handleCloseModal();
       loadData();
-    } catch (error: any) {
-      showToast(error.response?.data?.message || 'Erro ao salvar produto', 'error');
+    } catch (error: unknown) {
+      const err = error as ErrorResponse;
+      showToast(err.response?.data?.message || 'Erro ao salvar produto', 'error');
     }
   };
 
@@ -114,8 +123,9 @@ export function Produtos() {
         await productService.delete(id);
         showToast('Produto deletado com sucesso!', 'success');
         loadData();
-      } catch (error: any) {
-        showToast(error.response?.data?.message || 'Erro ao deletar produto', 'error');
+      } catch (error: unknown) {
+        const err = error as ErrorResponse;
+        showToast(err.response?.data?.message || 'Erro ao deletar produto', 'error');
       }
     }
   };
@@ -148,8 +158,9 @@ export function Produtos() {
       );
       handleClosePromotionModal();
       loadData();
-    } catch (error: any) {
-      showToast(error.response?.data?.message || 'Erro ao definir promoção', 'error');
+    } catch (error: unknown) {
+      const err = error as ErrorResponse;
+      showToast(err.response?.data?.message || 'Erro ao definir promoção', 'error');
     }
   };
 

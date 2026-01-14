@@ -57,7 +57,7 @@ export function Cadastro() {
       
       // Redireciona baseado no tipo de usuário
       setTimeout(() => {
-        if (tipo === 'vendedor' || tipo === 'admin') {
+        if (tipo === 'vendedor') {
           navigate('/admin/dashboard');
         } else {
           navigate('/');

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { AdminLayout } from '../../layouts/AdminLayout';
 import { Card } from '../../components/Card';
 import { Button } from '../../components/Button';
@@ -11,6 +11,14 @@ import { Plus, Edit2, Trash2 } from 'lucide-react';
 import { categoryService } from '../../services/categoryService';
 import { Category, CreateCategoryData } from '../../types';
 
+interface ErrorResponse {
+  response?: {
+    data?: {
+      message?: string;
+    };
+  };
+}
+
 export function Categorias() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
@@ -22,21 +30,21 @@ export function Categorias() {
   });
   const { toast, showToast, hideToast } = useToast();
 
-  useEffect(() => {
-    loadCategories();
-  }, []);
-
-  const loadCategories = async () => {
+  const loadCategories = useCallback(async () => {
     try {
       setLoading(true);
       const data = await categoryService.getAll();
       setCategories(data);
-    } catch (error) {
+    } catch {
       showToast('Erro ao carregar categorias', 'error');
     } finally {
       setLoading(false);
     }
-  };
+  }, [showToast]);
+
+  useEffect(() => {
+    loadCategories();
+  }, [loadCategories]);
 
   const handleOpenModal = (category?: Category) => {
     if (category) {
@@ -67,8 +75,9 @@ export function Categorias() {
       }
       handleCloseModal();
       loadCategories();
-    } catch (error: any) {
-      showToast(error.response?.data?.message || 'Erro ao salvar categoria', 'error');
+    } catch (error: unknown) {
+      const err = error as ErrorResponse;
+      showToast(err.response?.data?.message || 'Erro ao salvar categoria', 'error');
     }
   };
 
@@ -78,8 +87,9 @@ export function Categorias() {
         await categoryService.delete(id);
         showToast('Categoria deletada com sucesso!', 'success');
         loadCategories();
-      } catch (error: any) {
-        showToast(error.response?.data?.message || 'Erro ao deletar categoria', 'error');
+      } catch (error: unknown) {
+        const err = error as ErrorResponse;
+        showToast(err.response?.data?.message || 'Erro ao deletar categoria', 'error');
       }
     }
   };

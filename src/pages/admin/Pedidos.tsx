@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { AdminLayout } from '../../layouts/AdminLayout';
 import { Card } from '../../components/Card';
 import { Button } from '../../components/Button';
@@ -10,6 +10,14 @@ import { Eye, XCircle } from 'lucide-react';
 import { orderService } from '../../services/orderService';
 import { Order } from '../../types';
 
+interface ErrorResponse {
+  response?: {
+    data?: {
+      message?: string;
+    };
+  };
+}
+
 export function Pedidos() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
@@ -18,30 +26,30 @@ export function Pedidos() {
   const [statusFilter, setStatusFilter] = useState('');
   const { toast, showToast, hideToast } = useToast();
 
-  useEffect(() => {
-    loadOrders();
-  }, [statusFilter]);
-
-  const loadOrders = async () => {
+  const loadOrders = useCallback(async () => {
     try {
       setLoading(true);
       const data = statusFilter
         ? await orderService.getByStatus(statusFilter)
         : await orderService.getAll();
       setOrders(data);
-    } catch (error) {
+    } catch {
       showToast('Erro ao carregar pedidos', 'error');
     } finally {
       setLoading(false);
     }
-  };
+  }, [statusFilter, showToast]);
+
+  useEffect(() => {
+    loadOrders();
+  }, [loadOrders]);
 
   const handleViewOrder = async (id: number) => {
     try {
       const order = await orderService.getById(id);
       setSelectedOrder(order);
       setIsModalOpen(true);
-    } catch (error) {
+    } catch {
       showToast('Erro ao carregar detalhes do pedido', 'error');
     }
   };
@@ -57,8 +65,9 @@ export function Pedidos() {
         const updated = await orderService.getById(id);
         setSelectedOrder(updated);
       }
-    } catch (error: any) {
-      showToast(error.response?.data?.message || 'Erro ao atualizar status', 'error');
+    } catch (error: unknown) {
+      const err = error as ErrorResponse;
+      showToast(err.response?.data?.message || 'Erro ao atualizar status', 'error');
     }
   };
 
@@ -69,8 +78,9 @@ export function Pedidos() {
         showToast('Pedido cancelado com sucesso!', 'success');
         setIsModalOpen(false);
         loadOrders();
-      } catch (error: any) {
-        showToast(error.response?.data?.message || 'Erro ao cancelar pedido', 'error');
+      } catch (error: unknown) {
+        const err = error as ErrorResponse;
+        showToast(err.response?.data?.message || 'Erro ao cancelar pedido', 'error');
       }
     }
   };

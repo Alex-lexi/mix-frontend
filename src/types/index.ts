@@ -103,8 +103,6 @@ export interface Cart {
   createdAt: string;
   updatedAt: string;
 }
-  updatedAt: string;
-}
 
 export interface AddToCartData {
   produtoId: number;
@@ -127,14 +125,18 @@ export interface OrderItem {
 
 export interface Order {
   id: number;
-  numero: string;
+  numero?: string;
+  numeroPedido?: string;
   status: 'pendente' | 'processando' | 'enviado' | 'entregue' | 'cancelado';
   total: number;
   usuarioId?: number;
-  clienteNome: string;
-  clienteEmail: string;
-  clienteTelefone: string;
-  clienteEndereco: string;
+  nomeCliente?: string;
+  clienteNome?: string;
+  emailCliente?: string;
+  clienteEmail?: string;
+  telefonecliente?: string;
+  clienteTelefone?: string;
+  clienteEndereco?: string;
   observacoes?: string;
   itens: OrderItem[];
   usuario?: User;
