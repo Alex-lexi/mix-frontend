@@ -104,7 +104,7 @@ export function Pedidos() {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="input-field w-64"
+            className="input-field w-64 text-gray-900"
           >
             <option value="">Todos</option>
             <option value="pendente">Pendente</option>

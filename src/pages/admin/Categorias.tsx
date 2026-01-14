@@ -96,9 +96,10 @@ export function Categorias() {
     <AdminLayout>
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold">Categorias</h1>
-        <Button onClick={() => handleOpenModal()}>
-          <Plus size={20} className="inline mr-2" />
-          Nova Categoria
+        <Button onClick={() => handleOpenModal()} className='bg-purple-300 hover:bg-purple-400 flex items-center'>
+          <Plus size={20} className="inline mr-2 text-gray-900" />
+          <p className='text-gray-900'>Nova Categoria</p>
+          
         </Button>
       </div>
 
@@ -156,6 +157,7 @@ export function Categorias() {
             label="Nome"
             value={formData.nome}
             onChange={(e) => setFormData({ ...formData, nome: e.target.value })}
+            className='text-gray-900'
             required
           />
 
@@ -166,7 +168,7 @@ export function Categorias() {
             <textarea
               value={formData.descricao}
               onChange={(e) => setFormData({ ...formData, descricao: e.target.value })}
-              className="input-field min-h-[100px]"
+              className="input-field min-h-[100px] text-gray-900"
             />
           </div>
 
@@ -174,7 +176,7 @@ export function Categorias() {
             <Button type="button" variant="secondary" onClick={handleCloseModal}>
               Cancelar
             </Button>
-            <Button type="submit">
+            <Button type="submit" className='bg-purple-400 hover:bg-purple-500'>
               {editingCategory ? 'Salvar' : 'Criar'}
             </Button>
           </div>

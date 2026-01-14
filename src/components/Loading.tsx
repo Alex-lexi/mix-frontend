@@ -8,7 +8,7 @@ interface LoadingProps {
 export function Loading({ message = 'Carregando...', fullScreen = false }: LoadingProps) {
   if (fullScreen) {
     return (
-      <div className="fixed inset-0 flex items-center justify-center bg-white bg-opacity-90 z-50">
+      <div className="fixed inset-0 flex items-center justify-center bg-black/30 backdrop-blur-md z-50">
         <div className="text-center">
           <Loader2 className="animate-spin h-12 w-12 text-primary-600 mx-auto mb-4" />
           <p className="text-gray-600">{message}</p>

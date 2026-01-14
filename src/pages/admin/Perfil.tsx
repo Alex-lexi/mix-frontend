@@ -42,12 +42,14 @@ export function Perfil() {
               label="Nome"
               value={nome}
               onChange={(e) => setNome(e.target.value)}
+              className='text-gray-900'
               required
             />
 
             <Input
               label="Email"
               value={user?.email || ''}
+              className='text-gray-900'
               disabled
             />
 
@@ -55,17 +57,19 @@ export function Perfil() {
               label="Telefone"
               value={telefone}
               onChange={(e) => setTelefone(e.target.value)}
+              className='text-gray-900'
               placeholder="(00) 00000-0000"
             />
 
             <Input
               label="Tipo de Usuário"
               value={user?.tipo || ''}
+              className='text-gray-900'
               disabled
             />
 
-            <Button type="submit" loading={loading}>
-              Salvar Alterações
+            <Button type="submit" loading={loading} className='bg-purple-400 hover:bg-purple-500 flex items-center'>
+              <p className='text-gray-900'>Salvar Alterações</p>
             </Button>
           </form>
         </Card>

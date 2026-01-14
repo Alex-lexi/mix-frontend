@@ -169,9 +169,10 @@ export function Produtos() {
     <AdminLayout>
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold">Produtos</h1>
-        <Button onClick={() => handleOpenModal()}>
-          <Plus size={20} className="inline mr-2" />
-          Novo Produto
+        <Button onClick={() => handleOpenModal()} className='bg-purple-300 hover:bg-purple-400 flex items-center'>
+          <Plus size={20} className="inline mr-2 text-gray-900" />
+          <p className='text-gray-900'>Novo Produto</p>
+         
         </Button>
       </div>
 
@@ -289,6 +290,7 @@ export function Produtos() {
               label="Nome"
               value={formData.nome}
               onChange={(e) => setFormData({ ...formData, nome: e.target.value })}
+              className='text-gray-900'
               required
             />
 
@@ -298,6 +300,7 @@ export function Produtos() {
               step="0.01"
               value={formData.preco}
               onChange={(e) => setFormData({ ...formData, preco: parseFloat(e.target.value) })}
+              className='text-gray-900'
               required
             />
 
@@ -306,6 +309,7 @@ export function Produtos() {
               type="number"
               value={formData.quantidade}
               onChange={(e) => setFormData({ ...formData, quantidade: parseInt(e.target.value) })}
+              className='text-gray-900'
               required
             />
 
@@ -318,7 +322,7 @@ export function Produtos() {
                 onChange={(e) =>
                   setFormData({ ...formData, categoriaId: e.target.value ? parseInt(e.target.value) : undefined })
                 }
-                className="input-field"
+                className="input-field text-gray-900"
               >
                 <option value="">Selecione uma categoria</option>
                 {categories.map((cat) => (
@@ -333,12 +337,14 @@ export function Produtos() {
               label="Cor (opcional)"
               value={formData.cor}
               onChange={(e) => setFormData({ ...formData, cor: e.target.value })}
+              className='text-gray-900'
             />
 
             <Input
               label="Tamanho (opcional)"
               value={formData.tamanho}
               onChange={(e) => setFormData({ ...formData, tamanho: e.target.value })}
+              className='text-gray-900'
             />
           </div>
 
@@ -347,6 +353,7 @@ export function Produtos() {
             value={formData.imagem}
             onChange={(e) => setFormData({ ...formData, imagem: e.target.value })}
             placeholder="https://..."
+            className='text-gray-900'
           />
 
           <div className="mb-4">
@@ -356,7 +363,7 @@ export function Produtos() {
             <textarea
               value={formData.descricao}
               onChange={(e) => setFormData({ ...formData, descricao: e.target.value })}
-              className="input-field min-h-[100px]"
+              className="input-field min-h-[100px] text-gray-900"
             />
           </div>
 
@@ -364,8 +371,9 @@ export function Produtos() {
             <Button type="button" variant="secondary" onClick={handleCloseModal}>
               Cancelar
             </Button>
-            <Button type="submit">
-              {editingProduct ? 'Salvar' : 'Criar'}
+            <Button type="submit" className='bg-green-300 hover:bg-green-400'>
+              <p className='text-gray-900'>{editingProduct ? 'Salvar' : 'Criar'}</p>
+              
             </Button>
           </div>
         </form>
@@ -414,6 +422,7 @@ export function Produtos() {
                     ...promotionData, 
                     precoPromocional: parseFloat(e.target.value) 
                   })}
+                  className='text-gray-900'
                   required
                 />
                 {promotionProduct && promotionData.precoPromocional > 0 && (
@@ -444,6 +453,7 @@ export function Produtos() {
             <Button 
               type="submit"
               disabled={promotionData.emPromocao && promotionProduct && promotionData.precoPromocional >= promotionProduct.preco}
+              className='bg-purple-400 hover:bg-purple-500'
             >
               {promotionData.emPromocao ? 'Ativar Promoção' : 'Remover Promoção'}
             </Button>
