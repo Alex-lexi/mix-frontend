@@ -4,7 +4,7 @@ import { ClientLayout } from '../../layouts/ClientLayout';
 import { Card } from '../../components/Card';
 import { Button } from '../../components/Button';
 import { Loading } from '../../components/Loading';
-import { Star, ShoppingCart, Minus, Plus } from 'lucide-react';
+import { ShoppingCart, Minus, Plus } from 'lucide-react';
 import { Toast } from '../../components/Toast';
 import { useToast } from '../../hooks/useToast';
 import { productService } from '../../services/productService';
@@ -117,17 +117,6 @@ export function ProdutoDetalhe() {
           <div>
             <h1 className="text-4xl font-bold mb-4">{product.nome}</h1>
 
-            <div className="flex items-center mb-4">
-              {[1, 2, 3, 4, 5].map((star) => (
-                <Star
-                  key={star}
-                  className="text-yellow-400 fill-current"
-                  size={20}
-                />
-              ))}
-              <span className="ml-2 text-gray-600">(5.0)</span>
-            </div>
-
             {product.categoria && (
               <p className="text-gray-600 mb-4">
                 Categoria: <span className="font-medium">{product.categoria.nome}</span>
@@ -212,9 +201,9 @@ export function ProdutoDetalhe() {
                     </div>
                   </div>
 
-                  <Button onClick={handleAddToCart} className="w-full text-lg">
-                    <ShoppingCart className="inline mr-2" size={20} />
-                    Adicionar ao Carrinho
+                  <Button onClick={handleAddToCart} className="w-1/3 text-lg bg-green-300 hover:bg-green-400">
+                    <ShoppingCart className="inline mr-2 text-gray-900" size={20} />
+                    <p className='text-gray-900'>Adicionar ao Carrinho</p>
                   </Button>
                 </>
               ) : (

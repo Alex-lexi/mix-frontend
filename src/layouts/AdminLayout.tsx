@@ -41,7 +41,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
       {/* Sidebar */}
       <aside className="w-64 bg-[#0f0620]/90 backdrop-blur-md shadow-2xl border-r border-pink-500/20">
         <div className="p-6 border-b border-pink-500/20">
-          <img src="/logo.svg" alt="MIX" className="h-14 w-auto mb-3 brightness-0 invert" />
+          <img src="/logo.png" alt="MIX" className="h-14 w-auto mb-3 rounded-md" />
           <h1 className="text-lg font-bold text-pink-400">Admin Panel</h1>
           {user && (
             <p className="text-sm text-gray-300 mt-2 font-medium">Olá, {user.nome}</p>

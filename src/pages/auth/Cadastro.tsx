@@ -171,7 +171,7 @@ export function Cadastro() {
                       : 'border-white/10 bg-white/5 text-gray-400 hover:border-white/20'
                   }`}
                 >
-                  <div className="text-center">
+                  <div className="text-center text-gray-900">
                     <div className="text-2xl mb-1">🛍️</div>
                     <div className="font-semibold">Cliente</div>
                     <div className="text-xs mt-1 opacity-80">Fazer compras</div>
