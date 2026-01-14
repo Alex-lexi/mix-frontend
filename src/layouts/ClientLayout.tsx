@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ShoppingCart, Search, User, LogOut } from 'lucide-react';
 import { useCart } from '../contexts/CartContext';
@@ -6,16 +6,26 @@ import { useAuth } from '../contexts/AuthContext';
 
 interface ClientLayoutProps {
   children: ReactNode;
+  onSearch?: (term: string) => void;
 }
 
-export function ClientLayout({ children }: ClientLayoutProps) {
+export function ClientLayout({ children, onSearch }: ClientLayoutProps) {
   const { itemsCount } = useCart();
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const [localSearchTerm, setLocalSearchTerm] = useState('');
 
   const handleLogout = () => {
     logout();
     navigate('/');
+  };
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setLocalSearchTerm(value);
+    if (onSearch) {
+      onSearch(value);
+    }
   };
 
   return (
@@ -34,6 +44,8 @@ export function ClientLayout({ children }: ClientLayoutProps) {
                 <input
                   type="text"
                   placeholder="O que você procura?"
+                  value={localSearchTerm}
+                  onChange={handleSearchChange}
                   className="w-full pl-10 pr-4 py-3 border border-gray-600 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none bg-[#2d1b4e]/50 text-white placeholder-gray-400 transition-all"
                 />
               </div>
