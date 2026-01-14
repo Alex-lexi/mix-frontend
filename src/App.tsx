@@ -4,6 +4,10 @@ import { CartProvider } from './contexts/CartContext';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { ErrorBoundary } from './components/ErrorBoundary';
 
+// Auth Pages
+import { Login } from './pages/auth/Login';
+import { Cadastro } from './pages/auth/Cadastro';
+
 // Admin Pages
 import { AdminLogin } from './pages/admin/AdminLogin';
 import { Dashboard } from './pages/admin/Dashboard';
@@ -27,6 +31,10 @@ function App() {
         <AuthProvider>
           <CartProvider>
             <Routes>
+              {/* Auth Routes */}
+              <Route path="/login" element={<Login />} />
+              <Route path="/cadastro" element={<Cadastro />} />
+              
               {/* Client Routes */}
               <Route path="/" element={<Home />} />
               <Route path="/produtos" element={<Catalogo />} />

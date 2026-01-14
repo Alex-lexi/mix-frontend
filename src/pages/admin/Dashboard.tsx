@@ -1,16 +1,19 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { AdminLayout } from '../../layouts/AdminLayout';
 import { Card } from '../../components/Card';
 import { Loading } from '../../components/Loading';
-import { Package, ShoppingCart, DollarSign, TrendingUp } from 'lucide-react';
+import { Package, ShoppingCart, DollarSign, TrendingUp, Layers, Plus } from 'lucide-react';
 import { orderService } from '../../services/orderService';
 import { productService } from '../../services/productService';
 import { Order, Product } from '../../types';
+import { useAuth } from '../../contexts/AuthContext';
 
 export function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [orders, setOrders] = useState<Order[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
+  const { user } = useAuth();
 
   useEffect(() => {
     loadData();
@@ -57,7 +60,68 @@ export function Dashboard() {
 
   return (
     <AdminLayout>
-      <h1 className="text-3xl font-bold mb-8">Dashboard</h1>
+      {/* Boas-vindas */}
+      <div className="mb-8">
+        <h1 className="text-4xl font-bold bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent mb-2">
+          Bem-vindo, {user?.nome}! 👋
+        </h1>
+        <p className="text-gray-400 text-lg">
+          Gerencie sua loja, produtos e pedidos em um só lugar
+        </p>
+      </div>
+
+      {/* Acesso Rápido */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <Link 
+          to="/admin/produtos" 
+          className="group backdrop-blur-xl bg-gradient-to-br from-pink-500/20 to-pink-600/10 border border-pink-500/30 rounded-2xl p-6 hover:shadow-2xl hover:shadow-pink-500/20 transition-all duration-300 hover:scale-105"
+        >
+          <div className="flex items-center gap-4 mb-4">
+            <div className="p-3 bg-pink-500/20 rounded-xl group-hover:bg-pink-500/30 transition-colors">
+              <Package className="text-pink-400" size={28} />
+            </div>
+            <h3 className="text-xl font-bold text-white">Produtos</h3>
+          </div>
+          <p className="text-gray-400 mb-4">Adicione, edite e gerencie seus produtos</p>
+          <div className="flex items-center text-pink-400 font-medium">
+            <Plus size={18} className="mr-1" />
+            Adicionar Produto
+          </div>
+        </Link>
+
+        <Link 
+          to="/admin/categorias" 
+          className="group backdrop-blur-xl bg-gradient-to-br from-purple-500/20 to-purple-600/10 border border-purple-500/30 rounded-2xl p-6 hover:shadow-2xl hover:shadow-purple-500/20 transition-all duration-300 hover:scale-105"
+        >
+          <div className="flex items-center gap-4 mb-4">
+            <div className="p-3 bg-purple-500/20 rounded-xl group-hover:bg-purple-500/30 transition-colors">
+              <Layers className="text-purple-400" size={28} />
+            </div>
+            <h3 className="text-xl font-bold text-white">Categorias</h3>
+          </div>
+          <p className="text-gray-400 mb-4">Organize seus produtos por categoria</p>
+          <div className="flex items-center text-purple-400 font-medium">
+            <Plus size={18} className="mr-1" />
+            Criar Categoria
+          </div>
+        </Link>
+
+        <Link 
+          to="/admin/pedidos" 
+          className="group backdrop-blur-xl bg-gradient-to-br from-blue-500/20 to-blue-600/10 border border-blue-500/30 rounded-2xl p-6 hover:shadow-2xl hover:shadow-blue-500/20 transition-all duration-300 hover:scale-105"
+        >
+          <div className="flex items-center gap-4 mb-4">
+            <div className="p-3 bg-blue-500/20 rounded-xl group-hover:bg-blue-500/30 transition-colors">
+              <ShoppingCart className="text-blue-400" size={28} />
+            </div>
+            <h3 className="text-xl font-bold text-white">Pedidos</h3>
+          </div>
+          <p className="text-gray-400 mb-4">Acompanhe e gerencie seus pedidos</p>
+          <div className="flex items-center text-blue-400 font-medium">
+            Ver Todos →
+          </div>
+        </Link>
+      </div>
 
       {/* Cards de Estatísticas */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">

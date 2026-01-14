@@ -1,7 +1,8 @@
 import { ReactNode } from 'react';
-import { Link } from 'react-router-dom';
-import { ShoppingCart, Search } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { ShoppingCart, Search, User, LogOut } from 'lucide-react';
 import { useCart } from '../contexts/CartContext';
+import { useAuth } from '../contexts/AuthContext';
 
 interface ClientLayoutProps {
   children: ReactNode;
@@ -9,6 +10,13 @@ interface ClientLayoutProps {
 
 export function ClientLayout({ children }: ClientLayoutProps) {
   const { itemsCount } = useCart();
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#1a0b2e] to-[#2d1b4e]">
@@ -38,6 +46,39 @@ export function ClientLayout({ children }: ClientLayoutProps) {
               <Link to="/rastreamento" className="text-gray-300 hover:text-pink-400 font-medium transition-all">
                 Rastrear Pedido
               </Link>
+              
+              {/* Auth Section */}
+              {user ? (
+                <div className="flex items-center gap-4">
+                  {user.tipo === 'vendedor' && (
+                    <Link 
+                      to="/admin/dashboard" 
+                      className="px-4 py-2 bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-lg font-medium hover:shadow-lg hover:shadow-purple-500/50 transition-all"
+                    >
+                      Painel Admin
+                    </Link>
+                  )}
+                  <div className="text-gray-300 text-sm">
+                    Olá, <span className="font-semibold text-pink-400">{user.nome.split(' ')[0]}</span>
+                  </div>
+                  <button 
+                    onClick={handleLogout}
+                    className="text-gray-400 hover:text-red-400 transition-colors"
+                    title="Sair"
+                  >
+                    <LogOut size={20} />
+                  </button>
+                </div>
+              ) : (
+                <Link 
+                  to="/login" 
+                  className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-lg font-medium hover:shadow-lg hover:shadow-pink-500/50 transition-all"
+                >
+                  <User size={18} />
+                  Entrar
+                </Link>
+              )}
+              
               <Link to="/carrinho" className="relative">
                 <ShoppingCart className="text-gray-300 hover:text-pink-400 transition-colors" size={26} />
                 {itemsCount > 0 && (
