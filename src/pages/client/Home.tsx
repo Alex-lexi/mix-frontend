@@ -121,23 +121,23 @@ export function Home() {
   return (
     <ClientLayout onSearch={setSearchTerm}>
       {/* Barra de Navegação - Filtros */}
-      <div className="sticky top-20 z-30 bg-[#1a0b2e] border-b border-pink-500/20 shadow-xl">
+      <div className="sticky top-16 z-30 bg-[#1a0b2e] border-b border-pink-500/20 shadow-xl">
         <div className="container mx-auto px-4">
-          <div className="flex items-center gap-4 py-4">
+          <div className="py-3 md:py-4 flex flex-col gap-3 md:flex-row md:items-center md:gap-4">
             {/* Filtros de Tipo */}
-            <div className="flex items-center gap-2 flex-1">
+            <div className="flex items-center gap-2 flex-1 overflow-x-auto scrollbar-hide">
               <button
                 onClick={() => {
                   setSelectedFilter('all');
                   setSelectedCategoryId(null);
                 }}
-                className={`px-6 py-2.5 rounded-lg font-semibold text-sm transition-all whitespace-nowrap cursor-pointer ${
+                className={`px-3 md:px-6 py-2 md:py-2.5 rounded-lg font-semibold text-xs md:text-sm transition-all whitespace-nowrap cursor-pointer flex-shrink-0 ${
                   selectedFilter === 'all'
                     ? 'bg-gradient-to-r from-pink-500 to-purple-600 text-white shadow-lg shadow-pink-500/50'
                     : 'bg-[#2d1b4e] text-gray-300 hover:bg-[#3d2b5e] hover:text-white'
                 }`}
               >
-                Todos os Produtos
+                Todos
               </button>
               
               <button
@@ -145,14 +145,15 @@ export function Home() {
                   setSelectedFilter('novidades');
                   setSelectedCategoryId(null);
                 }}
-                className={`flex items-center gap-2 px-6 py-2.5 rounded-lg font-semibold text-sm transition-all whitespace-nowrap cursor-pointer ${
+                className={`flex items-center gap-1 md:gap-2 px-3 md:px-6 py-2 md:py-2.5 rounded-lg font-semibold text-xs md:text-sm transition-all whitespace-nowrap cursor-pointer flex-shrink-0 ${
                   selectedFilter === 'novidades'
                     ? 'bg-gradient-to-r from-pink-500 to-purple-600 text-white shadow-lg shadow-pink-500/50'
                     : 'bg-[#2d1b4e] text-gray-300 hover:bg-[#3d2b5e] hover:text-white'
                 }`}
               >
-                <Sparkles size={16} />
-                Novidades ({newProducts.length})
+                <Sparkles size={14} />
+                <span className="hidden sm:inline">Novidades</span>
+                <span className="sm:hidden">Novo</span>
               </button>
 
               <button
@@ -160,14 +161,15 @@ export function Home() {
                   setSelectedFilter('promocoes');
                   setSelectedCategoryId(null);
                 }}
-                className={`flex items-center gap-2 px-6 py-2.5 rounded-lg font-semibold text-sm transition-all whitespace-nowrap cursor-pointer ${
+                className={`flex items-center gap-1 md:gap-2 px-3 md:px-6 py-2 md:py-2.5 rounded-lg font-semibold text-xs md:text-sm transition-all whitespace-nowrap cursor-pointer flex-shrink-0 ${
                   selectedFilter === 'promocoes'
                     ? 'bg-gradient-to-r from-pink-500 to-purple-600 text-white shadow-lg shadow-pink-500/50'
                     : 'bg-[#2d1b4e] text-gray-300 hover:bg-[#3d2b5e] hover:text-white'
                 }`}
               >
-                <Tag size={16} />
-                Promoções ({promotionProducts.length})
+                <Tag size={14} />
+                <span className="hidden sm:inline">Promoções</span>
+                <span className="sm:hidden">Promo</span>
               </button>
 
               <button
@@ -175,43 +177,47 @@ export function Home() {
                   setSelectedFilter('mais-vendidos');
                   setSelectedCategoryId(null);
                 }}
-                className={`flex items-center gap-2 px-6 py-2.5 rounded-lg font-semibold text-sm transition-all whitespace-nowrap cursor-pointer ${
+                className={`flex items-center gap-1 md:gap-2 px-3 md:px-6 py-2 md:py-2.5 rounded-lg font-semibold text-xs md:text-sm transition-all whitespace-nowrap cursor-pointer flex-shrink-0 ${
                   selectedFilter === 'mais-vendidos'
                     ? 'bg-gradient-to-r from-pink-500 to-purple-600 text-white shadow-lg shadow-pink-500/50'
                     : 'bg-[#2d1b4e] text-gray-300 hover:bg-[#3d2b5e] hover:text-white'
                 }`}
               >
-                <TrendingUp size={16} />
-                Mais Vendidos ({mostSoldProducts.length})
+                <TrendingUp size={14} />
+                <span className="hidden sm:inline">Mais Vendidos</span>
+                <span className="sm:hidden">Top</span>
               </button>
             </div>
 
             {/* Dropdown de Categorias */}
-            <div className="relative">
+            <div className="relative flex-shrink-0">
               <button
                 onClick={() => setShowCategoryDropdown(!showCategoryDropdown)}
-                className="flex items-center gap-2 px-6 py-2.5 rounded-lg font-semibold text-sm bg-[#2d1b4e] text-gray-300 hover:bg-[#3d2b5e] hover:text-white transition-all whitespace-nowrap cursor-pointer"
+                className="flex items-center gap-2 px-3 md:px-6 py-2 md:py-2.5 rounded-lg font-semibold text-xs md:text-sm bg-[#2d1b4e] text-gray-300 hover:bg-[#3d2b5e] hover:text-white transition-all whitespace-nowrap cursor-pointer w-full md:w-auto"
               >
-                {selectedCategoryId 
-                  ? categories.find(c => c.id === selectedCategoryId)?.nome 
-                  : 'Todas Categorias'}
+                <span className="hidden md:inline">
+                  {selectedCategoryId 
+                    ? categories.find(c => c.id === selectedCategoryId)?.nome 
+                    : 'Categorias'}
+                </span>
+                <span className="md:hidden">Catálogo</span>
                 <ChevronDown size={16} className={`transition-transform ${showCategoryDropdown ? 'rotate-180' : ''}`} />
               </button>
 
               {showCategoryDropdown && (
-                <div className="absolute right-0 mt-2 w-56 bg-[#2d1b4e] border border-pink-500/20 rounded-lg shadow-2xl overflow-hidden z-50">
+                <div className="absolute right-0 mt-2 w-48 md:w-56 bg-[#2d1b4e] border border-pink-500/20 rounded-lg shadow-2xl overflow-hidden z-50">
                   <button
                     onClick={() => {
                       setSelectedCategoryId(null);
                       setShowCategoryDropdown(false);
                     }}
-                    className={`w-full text-left px-4 py-3 text-sm transition-colors cursor-pointer ${
+                    className={`w-full text-left px-4 py-2 md:py-3 text-xs md:text-sm transition-colors cursor-pointer ${
                       selectedCategoryId === null
                         ? 'bg-pink-500/20 text-pink-400 font-semibold'
                         : 'text-gray-300 hover:bg-[#3d2b5e] hover:text-white'
                     }`}
                   >
-                    Todas Categorias
+                    Todas
                   </button>
                   {categories.map((category) => (
                     <button
@@ -220,7 +226,7 @@ export function Home() {
                         setSelectedCategoryId(category.id);
                         setShowCategoryDropdown(false);
                       }}
-                      className={`w-full text-left px-4 py-3 text-sm transition-colors cursor-pointer ${
+                      className={`w-full text-left px-4 py-2 md:py-3 text-xs md:text-sm transition-colors cursor-pointer truncate ${
                         selectedCategoryId === category.id
                           ? 'bg-pink-500/20 text-pink-400 font-semibold'
                           : 'text-gray-300 hover:bg-[#3d2b5e] hover:text-white'
@@ -237,24 +243,24 @@ export function Home() {
       </div>
 
       {/* Catálogo de Produtos */}
-      <section className="container mx-auto px-4 py-8">
-        <div className="mb-6">
-          <h1 className="text-3xl font-bold text-white mb-2">
+      <section className="container mx-auto px-4 py-6 md:py-8">
+        <div className="mb-4 md:mb-6">
+          <h1 className="text-xl md:text-3xl font-bold text-white mb-1 md:mb-2">
             {selectedFilter === 'novidades' && '✨ Novidades'}
             {selectedFilter === 'promocoes' && '🔥 Promoções'}
             {selectedFilter === 'mais-vendidos' && '⭐ Mais Vendidos'}
-            {selectedFilter === 'all' && 'Catálogo de Produtos'}
+            {selectedFilter === 'all' && 'Catálogo'}
           </h1>
-          <p className="text-gray-400">
-            {filteredProducts.length} produto(s) encontrado(s)
+          <p className="text-gray-400 text-xs md:text-base">
+            {filteredProducts.length} produto(s)
             {selectedCategoryId && ` em ${categories.find(c => c.id === selectedCategoryId)?.nome}`}
             {searchTerm && ` para "${searchTerm}"`}
           </p>
         </div>
 
         {filteredProducts.length === 0 ? (
-          <div className="text-center py-20">
-            <p className="text-gray-400 text-lg mb-4">
+          <div className="text-center py-12 md:py-20">
+            <p className="text-gray-400 text-base md:text-lg mb-4">
               Nenhum produto encontrado
             </p>
             <button
@@ -263,31 +269,31 @@ export function Home() {
                 setSelectedCategoryId(null);
                 setSearchTerm('');
               }}
-              className="px-6 py-3 bg-gradient-to-r from-pink-500 to-purple-500 text-white rounded-lg font-semibold hover:shadow-lg transition-all cursor-pointer"
+              className="px-4 md:px-6 py-2 md:py-3 bg-gradient-to-r from-pink-500 to-purple-500 text-white rounded-lg font-semibold text-sm md:text-base hover:shadow-lg transition-all cursor-pointer"
             >
-              Ver Todos os Produtos
+              Ver Todos
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 md:gap-4">
             {filteredProducts.map((product) => {
               const preco = getPreco(product);
               return (
                 <div
                   key={product.id}
-                  className="group bg-[#2d1b4e] rounded-lg overflow-hidden shadow-lg hover:shadow-2xl hover:shadow-pink-500/20 transition-all duration-300 hover:scale-105 border border-pink-500/10"
+                  className="group bg-[#2d1b4e] rounded-lg md:rounded-xl overflow-hidden shadow-lg hover:shadow-2xl hover:shadow-pink-500/20 transition-all duration-300 hover:scale-105 border border-pink-500/10 flex flex-col"
                 >
                   {/* Badge de Desconto */}
                   {preco.desconto && (
-                    <div className="absolute top-2 left-2 z-10">
-                      <span className="bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow-lg">
+                    <div className="absolute top-1 md:top-2 left-1 md:left-2 z-10">
+                      <span className="bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs font-bold px-1.5 md:px-2 py-0.5 md:py-1 rounded-full shadow-lg">
                         -{preco.desconto}%
                       </span>
                     </div>
                   )}
 
                   {/* Imagem do Produto */}
-                  <Link to={`/produto/${product.id}`} className="block">
+                  <Link to={`/produto/${product.id}`} className="block flex-shrink-0">
                     <div className="aspect-square overflow-hidden bg-[#1a0b2e]">
                       <img
                         src={product.imagem || 'https://via.placeholder.com/300?text=Sem+Imagem'}
@@ -298,31 +304,31 @@ export function Home() {
                   </Link>
 
                   {/* Informações do Produto */}
-                  <div className="p-3">
+                  <div className="p-2 md:p-3 flex flex-col flex-grow">
                     <Link to={`/produto/${product.id}`}>
-                      <h3 className="text-white font-semibold text-sm mb-1 line-clamp-2 group-hover:text-pink-400 transition-colors">
+                      <h3 className="text-white font-semibold text-xs md:text-sm mb-1 line-clamp-2 group-hover:text-pink-400 transition-colors">
                         {product.nome}
                       </h3>
                     </Link>
 
                     {/* Categoria */}
                     {product.categoria && (
-                      <p className="text-gray-400 text-xs mb-2">{product.categoria.nome}</p>
+                      <p className="text-gray-400 text-xs mb-1 md:mb-2 line-clamp-1">{product.categoria.nome}</p>
                     )}
 
                     {/* Preço */}
-                    <div className="mb-2">
+                    <div className="mb-2 md:mb-3 flex-grow">
                       {preco.original ? (
                         <>
                           <p className="text-gray-400 text-xs line-through">
                             R$ {preco.original.toFixed(2)}
                           </p>
-                          <p className="text-pink-400 font-bold text-lg">
+                          <p className="text-pink-400 font-bold text-sm md:text-lg">
                             R$ {preco.atual.toFixed(2)}
                           </p>
                         </>
                       ) : (
-                        <p className="text-pink-400 font-bold text-lg">
+                        <p className="text-pink-400 font-bold text-sm md:text-lg">
                           R$ {preco.atual.toFixed(2)}
                         </p>
                       )}
@@ -332,15 +338,16 @@ export function Home() {
                     {product.quantidade > 0 ? (
                       <button
                         onClick={() => handleAddToCart(product)}
-                        className="w-full bg-gradient-to-r from-pink-500 to-purple-600 text-white py-2 px-3 rounded-lg text-xs font-semibold hover:shadow-lg hover:shadow-pink-500/50 transition-all flex items-center justify-center gap-2 cursor-pointer"
+                        className="w-full bg-gradient-to-r from-pink-500 to-purple-600 text-white py-1.5 md:py-2 px-2 md:px-3 rounded-lg text-xs font-semibold hover:shadow-lg hover:shadow-pink-500/50 transition-all flex items-center justify-center gap-1 md:gap-2 cursor-pointer mt-auto"
                       >
-                        <ShoppingCart size={14} />
-                        Adicionar
+                        <ShoppingCart size={12} />
+                        <span className="hidden md:inline">Adicionar</span>
+                        <span className="md:hidden">Add</span>
                       </button>
                     ) : (
                       <button
                         disabled
-                        className="w-full bg-gray-700 text-gray-400 py-2 px-3 rounded-lg text-xs font-semibold cursor-not-allowed"
+                        className="w-full bg-gray-700 text-gray-400 py-1.5 md:py-2 px-2 md:px-3 rounded-lg text-xs font-semibold cursor-not-allowed"
                       >
                         Esgotado
                       </button>

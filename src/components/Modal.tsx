@@ -24,10 +24,10 @@ export function Modal({ isOpen, onClose, title, children, size = 'md' }: ModalPr
   if (!isOpen) return null;
 
   const sizes = {
-    sm: 'max-w-md',
-    md: 'max-w-lg',
-    lg: 'max-w-2xl',
-    xl: 'max-w-4xl',
+    sm: 'max-w-xs sm:max-w-sm',
+    md: 'max-w-sm sm:max-w-lg',
+    lg: 'max-w-lg sm:max-w-2xl',
+    xl: 'max-w-2xl sm:max-w-4xl',
   };
 
   return (
@@ -35,10 +35,10 @@ export function Modal({ isOpen, onClose, title, children, size = 'md' }: ModalPr
       <div className="fixed inset-0 bg-black/30 backdrop-blur-md" onClick={onClose} />
       <div className={`relative bg-white rounded-lg shadow-xl w-full ${sizes[size]} max-h-[90vh] overflow-y-auto`}>
         <div className="flex items-center justify-between p-4 border-b">
-          <h2 className="text-xl font-semibold text-gray-900">{title}</h2>
+          <h2 className="text-lg sm:text-xl font-semibold text-gray-900 break-words">{title}</h2>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
+            className="text-gray-400 hover:text-gray-600 transition-colors cursor-pointer flex-shrink-0 ml-2"
           >
             <X size={24} />
           </button>

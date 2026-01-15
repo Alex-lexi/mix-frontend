@@ -121,18 +121,18 @@ export function Catalogo() {
     <ClientLayout onSearch={setSearchTerm}>
       {/* Categorias como Abas Horizontais */}
       {categories.length > 0 && (
-        <div className="sticky top-20 z-30 bg-gray-900/95 backdrop-blur-sm border-b border-gray-800 shadow-lg">
+        <div className="sticky top-16 z-30 bg-gray-900/95 backdrop-blur-sm border-b border-gray-800 shadow-lg">
           <div className="container mx-auto px-4">
-            <div className="flex items-center justify-between gap-4 py-3">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 md:gap-4 py-3">
               {/* Abas de Categorias */}
               <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide flex-1">
                 <button
                   onClick={() => setSelectedCategoryId(null)}
                   className={`
-                    flex-shrink-0 px-6 py-2.5 rounded-full font-semibold text-sm
+                    flex-shrink-0 px-3 md:px-6 py-2 md:py-2.5 rounded-full font-semibold text-xs md:text-sm
                     transition-all duration-200 whitespace-nowrap cursor-pointer
                     ${selectedCategoryId === null
-                      ? 'bg-gradient-to-r from-pink-500 to-purple-500 text-white shadow-lg scale-105'
+                      ? 'bg-gradient-to-r from-pink-500 to-purple-500 text-white shadow-lg'
                       : 'bg-gray-800 text-gray-300 hover:bg-gray-700 hover:text-white'
                     }
                   `}
@@ -145,10 +145,10 @@ export function Catalogo() {
                     key={category.id}
                     onClick={() => setSelectedCategoryId(category.id)}
                     className={`
-                      flex-shrink-0 px-6 py-2.5 rounded-full font-semibold text-sm
-                      transition-all duration-200 whitespace-nowrap cursor-pointer
+                      flex-shrink-0 px-3 md:px-6 py-2 md:py-2.5 rounded-full font-semibold text-xs md:text-sm
+                      transition-all duration-200 whitespace-nowrap cursor-pointer truncate
                       ${selectedCategoryId === category.id
-                        ? 'bg-gradient-to-r from-pink-500 to-purple-500 text-white shadow-lg scale-105'
+                        ? 'bg-gradient-to-r from-pink-500 to-purple-500 text-white shadow-lg'
                         : 'bg-gray-800 text-gray-300 hover:bg-gray-700 hover:text-white'
                       }
                     `}
@@ -164,15 +164,15 @@ export function Catalogo() {
                   type="number"
                   value={precoMin}
                   onChange={(e) => setPrecoMin(e.target.value)}
-                  placeholder="Preço mín"
-                  className="w-28 px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none"
+                  placeholder="Min"
+                  className="w-16 md:w-28 px-2 md:px-3 py-1.5 md:py-2 bg-gray-800 border border-gray-700 rounded-lg text-white text-xs md:text-sm focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none"
                 />
                 <input
                   type="number"
                   value={precoMax}
                   onChange={(e) => setPrecoMax(e.target.value)}
-                  placeholder="Preço máx"
-                  className="w-28 px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none"
+                  placeholder="Max"
+                  className="w-16 md:w-28 px-2 md:px-3 py-1.5 md:py-2 bg-gray-800 border border-gray-700 rounded-lg text-white text-xs md:text-sm focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none"
                 />
               </div>
             </div>
@@ -181,11 +181,11 @@ export function Catalogo() {
       )}
 
       {/* Catálogo de Produtos */}
-      <div className="container mx-auto px-4 py-8">
-        <div className="mb-6">
-          <h1 className="text-3xl font-bold text-white mb-2">Catálogo de Produtos</h1>
-          <p className="text-gray-400">
-            {filteredProducts.length} produto(s) encontrado(s)
+      <div className="container mx-auto px-4 py-6 md:py-8">
+        <div className="mb-4 md:mb-6">
+          <h1 className="text-2xl md:text-3xl font-bold text-white mb-1 md:mb-2">Catálogo</h1>
+          <p className="text-gray-400 text-xs md:text-base">
+            {filteredProducts.length} produto(s)
             {selectedCategoryId && ` em ${categories.find(c => c.id === selectedCategoryId)?.nome}`}
             {searchTerm && ` para "${searchTerm}"`}
           </p>
@@ -194,57 +194,57 @@ export function Catalogo() {
         {error ? (
           <Card>
             <div className="text-center py-8">
-              <p className="text-red-400 mb-4">{error}</p>
-              <Button onClick={() => loadData()}>
+              <p className="text-red-400 mb-4 text-sm md:text-base">{error}</p>
+              <Button onClick={() => loadData()} size="sm">
                 Tentar Novamente
               </Button>
             </div>
           </Card>
         ) : filteredProducts.length === 0 ? (
-          <div className="text-center py-20">
-            <p className="text-gray-400 text-lg mb-4">
-              Nenhum produto encontrado com os filtros aplicados
+          <div className="text-center py-12 md:py-20">
+            <p className="text-gray-400 text-base md:text-lg mb-4">
+              Nenhum produto encontrado
             </p>
             <button
               onClick={handleClearFilters}
-              className="px-6 py-3 bg-gradient-to-r from-pink-500 to-purple-500 text-white rounded-lg font-semibold hover:shadow-lg transition-all cursor-pointer"
+              className="px-4 md:px-6 py-2 md:py-3 bg-gradient-to-r from-pink-500 to-purple-500 text-white rounded-lg font-semibold text-sm md:text-base hover:shadow-lg transition-all cursor-pointer"
             >
               Limpar Filtros
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-6">
             {filteredProducts.map((product) => {
               if (!product || !product.id) return null;
               
               return (
-                <Card key={product.id} className="hover:scale-105 transition-all overflow-hidden group">
+                <Card key={product.id} className="hover:scale-105 transition-all overflow-hidden group flex flex-col">
                   <Link to={`/produto/${product.id}`}>
                     {product.imagem ? (
                       <div className="relative overflow-hidden">
                         <img
                           src={product.imagem}
                           alt={product.nome}
-                          className="w-full h-56 object-cover group-hover:scale-110 transition-transform duration-300"
+                          className="w-full h-40 md:h-56 object-cover group-hover:scale-110 transition-transform duration-300"
                         />
                         {product.quantidade <= 0 && (
                           <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
-                            <span className="bg-red-500 text-white px-4 py-2 rounded-full font-semibold text-sm">
+                            <span className="bg-red-500 text-white px-3 md:px-4 py-1 md:py-2 rounded-full font-semibold text-xs md:text-sm">
                               Esgotado
                             </span>
                           </div>
                         )}
                       </div>
                     ) : (
-                      <div className="w-full h-56 bg-gradient-to-br from-pink-500/20 to-purple-500/20 flex items-center justify-center">
-                        <span className="text-gray-500">Sem imagem</span>
+                      <div className="w-full h-40 md:h-56 bg-gradient-to-br from-pink-500/20 to-purple-500/20 flex items-center justify-center">
+                        <span className="text-gray-500 text-xs md:text-base">Sem imagem</span>
                       </div>
                     )}
                   </Link>
                   
-                  <div className="p-4">
+                  <div className="p-3 md:p-4 flex flex-col flex-grow">
                     <Link to={`/produto/${product.id}`}>
-                      <h3 className="font-bold text-lg mb-2 line-clamp-2 text-white group-hover:text-pink-400 transition-colors">
+                      <h3 className="font-bold text-sm md:text-lg mb-2 line-clamp-2 text-white group-hover:text-pink-400 transition-colors">
                         {product.nome}
                       </h3>
                     </Link>
@@ -254,50 +254,51 @@ export function Catalogo() {
                         <Star
                           key={star}
                           className="text-yellow-400 fill-current"
-                          size={14}
+                          size={12}
                         />
                       ))}
                     </div>
 
                     {product.categoria && product.categoria.nome && (
-                      <p className="text-sm text-gray-400 mb-2">{product.categoria.nome}</p>
+                      <p className="text-xs md:text-sm text-gray-400 mb-2 line-clamp-1">{product.categoria.nome}</p>
                     )}
 
-                    <div className="mb-3">
+                    <div className="mb-2 md:mb-3 flex-grow">
                       {product.emPromocao && product.precoPromocional ? (
                         <div>
                           <div className="mb-1">
-                            <span className="bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+                            <span className="bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs font-bold px-1.5 md:px-2 py-0.5 md:py-1 rounded-full">
                               -{Math.round(((product.preco - product.precoPromocional) / product.preco) * 100)}%
                             </span>
                           </div>
-                          <p className="text-sm text-gray-400 line-through">
+                          <p className="text-xs md:text-sm text-gray-400 line-through">
                             R$ {(product.preco || 0).toFixed(2)}
                           </p>
-                          <p className="text-2xl font-bold text-pink-400">
+                          <p className="text-lg md:text-2xl font-bold text-pink-400">
                             R$ {(product.precoPromocional || 0).toFixed(2)}
                           </p>
                         </div>
                       ) : (
-                        <p className="text-2xl font-bold bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
+                        <p className="text-lg md:text-2xl font-bold bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
                           R$ {(product.preco || 0).toFixed(2)}
                         </p>
                       )}
                     </div>
 
-                    <div className="flex gap-2">
+                    <div className="flex gap-2 mt-auto">
                       <Link to={`/produto/${product.id}`} className="flex-1">
-                        <Button variant="secondary" className="w-full text-sm">
-                          Ver Detalhes
+                        <Button variant="secondary" size="sm" className="w-full text-xs md:text-sm">
+                          Ver
                         </Button>
                       </Link>
                       <Button
                         onClick={() => handleAddToCart(product.id)}
                         disabled={!product.quantidade || product.quantidade === 0}
-                        className="text-sm"
+                        size="sm"
+                        className="text-xs md:text-sm"
                         title="Adicionar ao carrinho"
                       >
-                        <ShoppingCart size={16} />
+                        <ShoppingCart size={14} />
                       </Button>
                     </div>
                   </div>

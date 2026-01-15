@@ -71,22 +71,22 @@ export function Cadastro() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 py-12" style={{
+    <div className="min-h-screen flex items-center justify-center p-4 py-8 md:py-12" style={{
       background: 'linear-gradient(135deg, #1a0b2e 0%, #2d1b4e 100%)'
     }}>
       <div className="w-full max-w-md">
         {/* Logo */}
-        <div className="text-center mb-8">
-          <img src="/logo.png" alt="MIX Logo" className="h-16 mx-auto mb-4 rounded-md" />
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent">
+        <div className="text-center mb-6 md:mb-8">
+          <img src="/logo.png" alt="MIX Logo" className="h-12 md:h-16 mx-auto mb-4 rounded-md" />
+          <h1 className="text-2xl md:text-4xl font-bold bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent">
             Criar Conta
           </h1>
-          <p className="text-gray-400 mt-2">Preencha os dados para começar</p>
+          <p className="text-gray-400 mt-2 text-sm md:text-base">Preencha os dados para começar</p>
         </div>
 
         {/* Card de Cadastro */}
-        <div className="backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl p-8 shadow-2xl">
-          <form onSubmit={handleSubmit} className="space-y-5">
+        <div className="backdrop-blur-xl bg-white/10 border border-white/20 rounded-xl md:rounded-2xl p-6 md:p-8 shadow-2xl">
+          <form onSubmit={handleSubmit} className="space-y-4 md:space-y-5">
             <Input
               label="Nome Completo"
               type="text"
@@ -129,10 +129,10 @@ export function Cadastro() {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-9 text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
+                className="absolute right-3 top-9 md:top-10 text-gray-400 hover:text-gray-600 transition-colors cursor-pointer p-1"
                 tabIndex={-1}
               >
-                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
             </div>
 
@@ -149,32 +149,32 @@ export function Cadastro() {
               <button
                 type="button"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="absolute right-3 top-9 text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
+                className="absolute right-3 top-9 md:top-10 text-gray-400 hover:text-gray-600 transition-colors cursor-pointer p-1"
                 tabIndex={-1}
               >
-                {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
             </div>
 
             {/* Tipo de Usuário */}
             <div className="space-y-2">
-              <label className="block text-sm font-medium text-gray-300">
+              <label className="block text-xs md:text-sm font-medium text-gray-300">
                 Tipo de Conta
               </label>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-2 md:gap-3">
                 <button
                   type="button"
                   onClick={() => setTipo('cliente')}
-                  className={`p-4 rounded-lg border-2 transition-all duration-300 cursor-pointer ${
+                  className={`p-3 md:p-4 rounded-lg border-2 transition-all duration-300 cursor-pointer ${
                     tipo === 'cliente'
                       ? 'border-pink-500 bg-pink-500/20 text-gray-700'
                       : 'border-white/10 bg-white/5 text-gray-400 hover:border-white/20'
                   }`}
                 >
                   <div className="text-center text-gray-900">
-                    <div className="text-2xl mb-1">🛍️</div>
-                    <div className="font-semibold">Cliente</div>
-                    <div className="text-xs mt-1 opacity-80">Fazer compras</div>
+                    <div className="text-xl md:text-2xl mb-1">🛍️</div>
+                    <div className="font-semibold text-xs md:text-sm">Cliente</div>
+                    <div className="text-xs mt-1 opacity-80">Comprar</div>
                   </div>
                 </button>
                 
@@ -183,16 +183,16 @@ export function Cadastro() {
                   <button
                     type="button"
                     onClick={() => setTipo('vendedor')}
-                    className={`p-4 rounded-lg border-2 transition-all duration-300 cursor-pointer ${
+                    className={`p-3 md:p-4 rounded-lg border-2 transition-all duration-300 cursor-pointer ${
                       tipo === 'vendedor'
                         ? 'border-purple-500 bg-purple-500/20 text-gray-700'
                         : 'border-white/10 bg-white/5 text-gray-400 hover:border-white/20'
                     }`}
                   >
                     <div className="text-center">
-                      <div className="text-2xl mb-1">💼</div>
-                      <div className="font-semibold">Vendedor</div>
-                      <div className="text-xs mt-1 opacity-80">Gerenciar loja</div>
+                      <div className="text-xl md:text-2xl mb-1">💼</div>
+                      <div className="font-semibold text-xs md:text-sm">Vendedor</div>
+                      <div className="text-xs mt-1 opacity-80">Vender</div>
                     </div>
                   </button>
                 )}
@@ -201,14 +201,14 @@ export function Cadastro() {
               {/* Aviso se tentar criar vendedor sem ser admin */}
               {!isAdmin && (
                 <p className="text-xs text-gray-400 mt-2">
-                  Apenas administradores podem criar contas de vendedor. Se você deseja vender, entre em contato com o administrador.
+                  Apenas administradores podem criar contas de vendedor.
                 </p>
               )}
             </div>
 
             <Button 
               type="submit" 
-              className="w-full cursor-pointer bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-semibold py-3 rounded-lg shadow-lg hover:shadow-purple-500/50 transition-all duration-300" 
+              className="w-full cursor-pointer bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-semibold py-2.5 md:py-3 rounded-lg shadow-lg hover:shadow-purple-500/50 transition-all duration-300 text-sm md:text-base" 
               loading={loading}
             >
               Criar Conta
@@ -216,8 +216,8 @@ export function Cadastro() {
           </form>
 
           {/* Links */}
-          <div className="mt-6 text-center space-y-2">
-            <p className="text-gray-400 text-sm">
+          <div className="mt-4 md:mt-6 text-center space-y-2">
+            <p className="text-gray-400 text-xs md:text-sm">
               Já tem uma conta?{' '}
               <Link 
                 to="/login" 
@@ -228,7 +228,7 @@ export function Cadastro() {
             </p>
             <Link 
               to="/" 
-              className="text-gray-400 hover:text-white text-sm transition-colors block"
+              className="text-gray-400 hover:text-white text-xs md:text-sm transition-colors block"
             >
               Voltar para a loja
             </Link>

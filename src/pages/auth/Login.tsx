@@ -50,17 +50,17 @@ export function Login() {
     }}>
       <div className="w-full max-w-md">
         {/* Logo */}
-        <div className="text-center mb-8">
-          <img src="/logo.png" alt="MIX Logo" className="h-16 mx-auto mb-4 rounded-md" />
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent">
-            Bem-vindo de volta
+        <div className="text-center mb-6 md:mb-8">
+          <img src="/logo.png" alt="MIX Logo" className="h-12 md:h-16 mx-auto mb-4 rounded-md" />
+          <h1 className="text-2xl md:text-4xl font-bold bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent">
+            Bem-vindo
           </h1>
-          <p className="text-gray-400 mt-2">Entre na sua conta para continuar</p>
+          <p className="text-gray-400 mt-2 text-sm md:text-base">Entre na sua conta</p>
         </div>
 
         {/* Card de Login */}
-        <div className="backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl p-8 shadow-2xl">
-          <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="backdrop-blur-xl bg-white/10 border border-white/20 rounded-xl md:rounded-2xl p-6 md:p-8 shadow-2xl">
+          <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
             <Input
               label="Email"
               type="email"
@@ -84,16 +84,16 @@ export function Login() {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-9 text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
+                className="absolute right-3 top-9 md:top-10 text-gray-400 hover:text-gray-600 transition-colors cursor-pointer p-1"
                 tabIndex={-1}
               >
-                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
             </div>
 
             <Button 
               type="submit" 
-              className="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-semibold py-3 rounded-lg shadow-lg hover:shadow-pink-500/50 transition-all duration-300 cursor-pointer" 
+              className="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-semibold py-2.5 md:py-3 rounded-lg shadow-lg hover:shadow-pink-500/50 transition-all duration-300 cursor-pointer text-sm md:text-base" 
               loading={loading}
             >
               Entrar
@@ -101,8 +101,8 @@ export function Login() {
           </form>
 
           {/* Links */}
-          <div className="mt-6 text-center space-y-2">
-            <p className="text-gray-400 text-sm">
+          <div className="mt-4 md:mt-6 text-center space-y-2">
+            <p className="text-gray-400 text-xs md:text-sm">
               Não tem uma conta?{' '}
               <Link 
                 to="/cadastro" 
@@ -113,7 +113,7 @@ export function Login() {
             </p>
             <Link 
               to="/" 
-              className="text-gray-400 hover:text-white text-sm transition-colors block"
+              className="text-gray-400 hover:text-white text-xs md:text-sm transition-colors block"
             >
               Voltar para a loja
             </Link>
