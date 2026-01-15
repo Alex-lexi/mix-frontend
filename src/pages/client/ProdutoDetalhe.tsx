@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { ClientLayout } from '../../layouts/ClientLayout';
 import { Card } from '../../components/Card';
 import { Button } from '../../components/Button';
@@ -9,6 +9,7 @@ import { Toast } from '../../components/Toast';
 import { useToast } from '../../hooks/useToast';
 import { productService } from '../../services/productService';
 import { useCart } from '../../contexts/CartContext';
+import { useAuth } from '../../contexts/AuthContext';
 import { Product } from '../../types';
 
 export function ProdutoDetalhe() {
@@ -19,6 +20,8 @@ export function ProdutoDetalhe() {
   const [quantidade, setQuantidade] = useState(1);
   const { addToCart } = useCart();
   const { toast, showToast, hideToast } = useToast();
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (id) {
@@ -44,6 +47,14 @@ export function ProdutoDetalhe() {
 
   const handleAddToCart = async () => {
     if (!product) return;
+
+    // Se o cliente não estiver logado, redireciona para o login com redirect
+    if (!user) {
+      const redirect = `/produto/${product.id}`;
+      navigate(`/login?redirect=${encodeURIComponent(redirect)}`);
+      return;
+    }
+
     try {
       await addToCart({ produtoId: product.id, quantidade });
       showToast('Produto adicionado ao carrinho!', 'success');

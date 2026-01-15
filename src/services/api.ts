@@ -28,12 +28,41 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     console.error('API Error:', error.response?.data || error.message);
+
     if (error.response?.status === 401) {
-      // Token inválido ou expirado
+      const data = error.response?.data as { code?: string } | undefined;
+      const currentPath = window.location.pathname + window.location.search;
+      const storedUser = localStorage.getItem('user');
+      let userType: string | null = null;
+
+      if (storedUser) {
+        try {
+          const parsed = JSON.parse(storedUser);
+          userType = parsed?.tipo ?? null;
+        } catch {
+          userType = null;
+        }
+      }
+
+      // Caso específico: token não fornecido (usuário não logado)
+      if (data?.code === 'TOKEN_NAO_FORNECIDO') {
+        const isAdminRoute = currentPath.startsWith('/admin');
+        const loginPath = isAdminRoute ? '/admin/login' : '/login';
+        const redirectParam = encodeURIComponent(currentPath);
+        window.location.href = `${loginPath}?redirect=${redirectParam}`;
+        return Promise.reject(error);
+      }
+
+      // Token inválido ou expirado: limpar sessão e redirecionar
       localStorage.removeItem('token');
       localStorage.removeItem('user');
-      window.location.href = '/admin/login';
+
+      const isAdminUser = userType === 'admin' || userType === 'vendedor' || currentPath.startsWith('/admin');
+      const loginPath = isAdminUser ? '/admin/login' : '/login';
+      const redirectParam = encodeURIComponent(currentPath);
+      window.location.href = `${loginPath}?redirect=${redirectParam}`;
     }
+
     return Promise.reject(error);
   }
 );

@@ -16,6 +16,7 @@ import { Produtos } from './pages/admin/Produtos';
 import { Pedidos } from './pages/admin/Pedidos';
 import { Perfil } from './pages/admin/Perfil';
 import { Vendedores } from './pages/admin/Vendedores';
+import { Promocoes } from './pages/admin/Promocoes';
 
 // Client Pages
 import { Home } from './pages/client/Home';
@@ -73,6 +74,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Produtos />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/promocoes"
+              element={
+                <ProtectedRoute>
+                  <Promocoes />
                 </ProtectedRoute>
               }
             />

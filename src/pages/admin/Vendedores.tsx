@@ -8,13 +8,16 @@ import { Toast } from '../../components/Toast';
 import { Loading } from '../../components/Loading';
 import { useToast } from '../../hooks/useToast';
 import { useAuth } from '../../contexts/AuthContext';
-import { Users, UserPlus, Edit2, Trash2, Eye, EyeOff } from 'lucide-react';
+import { Users, UserPlus, Trash2, Eye, EyeOff } from 'lucide-react';
 import api from '../../services/api';
 import { User } from '../../types';
+import { vendorService } from '../../services/vendorService';
 
 export function Vendedores() {
   const [vendedores, setVendedores] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [total, setTotal] = useState<number>(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const { toast, showToast, hideToast } = useToast();
@@ -39,16 +42,22 @@ export function Vendedores() {
   const loadVendedores = async () => {
     try {
       setLoading(true);
-      // TODO: Criar endpoint no backend para listar vendedores
-      // Por enquanto, vamos buscar todos os usuários e filtrar
-      const response = await api.get('/auth/usuarios');
-      const allUsers = response.data.data || response.data;
-      const vendedoresList = allUsers.filter((u: User) => u.tipo === 'vendedor');
-      setVendedores(vendedoresList);
+      setError(null);
+
+      const response = await vendorService.list();
+
+      setVendedores(response.data);
+      setTotal(response.total);
     } catch (error: any) {
       console.error('Erro ao carregar vendedores:', error);
-      // Se o endpoint não existir, mostrar array vazio
+      const message =
+        error.response?.data?.message ||
+        error.message ||
+        'Erro ao listar vendedores';
+      setError(message);
       setVendedores([]);
+      setTotal(0);
+      showToast(message, 'error');
     } finally {
       setLoading(false);
     }
@@ -102,7 +111,7 @@ export function Vendedores() {
     }
 
     try {
-      await api.delete(`/auth/usuarios/${id}`);
+      await api.delete(`/auth/vendedores/${id}`);
       showToast('Vendedor excluído com sucesso', 'success');
       loadVendedores();
     } catch (error: any) {
@@ -127,6 +136,17 @@ export function Vendedores() {
     );
   }
 
+  const formatarData = (dataISO: string) => {
+    if (!dataISO) return '-';
+    return new Date(dataISO).toLocaleDateString('pt-BR', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+  };
+
   return (
     <AdminLayout>
       <div className="space-y-6">
@@ -144,21 +164,35 @@ export function Vendedores() {
 
         <Card>
           {loading ? (
-            <Loading />
-          ) : vendedores.length === 0 ? (
+            <div className="py-8 flex justify-center">
+              <Loading />
+            </div>
+          ) : error ? (
+            <div className="text-center py-8">
+              <p className="text-red-400 mb-4">{error}</p>
+              <Button onClick={loadVendedores} className="bg-blue-500 hover:bg-blue-600">
+                Tentar novamente
+              </Button>
+            </div>
+          ) : total === 0 || vendedores.length === 0 ? (
             <div className="text-center py-8">
               <Users size={48} className="mx-auto text-gray-400 mb-4" />
-              <p className="text-gray-400 mb-4">Nenhum vendedor cadastrado ainda</p>
-              <Button onClick={handleOpenModal} className='flex bg-green-300 hover:bg-green-400'>
+              <p className="text-gray-400 mb-2">Nenhum vendedor cadastrado ainda</p>
+              <p className="text-gray-500 mb-4 text-sm">Cadastre o primeiro vendedor para começar</p>
+              <Button onClick={handleOpenModal} className="flex bg-green-300 hover:bg-green-400">
                 <UserPlus size={20} className="mr-2 text-gray-900" />
-                <p className='text-gray-900'>Criar Primeiro Vendedor</p>
-                
+                <p className="text-gray-900">Criar Primeiro Vendedor</p>
               </Button>
             </div>
           ) : (
             <div className="overflow-x-auto">
+              <div className="flex items-center justify-between mb-4">
+                <p className="text-sm text-gray-300">
+                  Total de vendedores: <span className="font-semibold">{total}</span>
+                </p>
+              </div>
               <table className="w-full">
-                <thead className="bg-gray-50 border-b-2">
+                <thead className="bg-purple-500 border-b-2">
                   <tr>
                     <th className="text-left py-3 px-4">ID</th>
                     <th className="text-left py-3 px-4">Nome</th>
@@ -170,13 +204,13 @@ export function Vendedores() {
                 </thead>
                 <tbody>
                   {vendedores.map((vendedor) => (
-                    <tr key={vendedor.id} className="border-b hover:bg-gray-50">
+                    <tr key={vendedor.id} className="border-b hover:bg-purple-400">
                       <td className="py-3 px-4">{vendedor.id}</td>
                       <td className="py-3 px-4 font-medium">{vendedor.nome}</td>
                       <td className="py-3 px-4">{vendedor.email}</td>
                       <td className="py-3 px-4">{vendedor.telefone || '-'}</td>
                       <td className="py-3 px-4 text-sm text-gray-600">
-                        {new Date(vendedor.createdAt).toLocaleDateString('pt-BR')}
+                        {formatarData(vendedor.createdAt)}
                       </td>
                       <td className="py-3 px-4">
                         <div className="flex justify-end gap-2">

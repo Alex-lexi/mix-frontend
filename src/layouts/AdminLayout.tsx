@@ -8,6 +8,7 @@ import {
   User,
   Users,
   LogOut,
+  Tag,
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -29,6 +30,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
     { path: '/admin/dashboard', icon: LayoutDashboard, label: 'Dashboard', adminOnly: false },
     { path: '/admin/vendedores', icon: Users, label: 'Vendedores', adminOnly: true },
     { path: '/admin/produtos', icon: Package, label: 'Produtos', adminOnly: false },
+    { path: '/admin/promocoes', icon: Tag, label: 'Promoções', adminOnly: false },
     { path: '/admin/categorias', icon: FolderTree, label: 'Categorias', adminOnly: false },
     { path: '/admin/pedidos', icon: ShoppingCart, label: 'Pedidos', adminOnly: false },
     { path: '/admin/perfil', icon: User, label: 'Perfil', adminOnly: false },

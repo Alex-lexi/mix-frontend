@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { Button } from '../../components/Button';
 import { Input } from '../../components/Input';
@@ -14,6 +14,7 @@ export function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const { toast, showToast, hideToast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -23,10 +24,14 @@ export function Login() {
     try {
       const user = await login(email, senha);
       showToast('Login realizado com sucesso!', 'success');
+      const params = new URLSearchParams(location.search);
+      const redirect = params.get('redirect');
       
       // Redireciona baseado no tipo de usuário
       setTimeout(() => {
-        if (user.tipo === 'admin' || user.tipo === 'vendedor') {
+        if (redirect) {
+          navigate(redirect, { replace: true });
+        } else if (user.tipo === 'admin' || user.tipo === 'vendedor') {
           navigate('/admin/dashboard');
         } else {
           navigate('/');
